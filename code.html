@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academia SIS - Beranda Publik</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-dim": "#d8dadc",
+                "inverse-primary": "#b6c4ff",
+                "inverse-on-surface": "#eff1f3",
+                "on-tertiary-fixed-variant": "#3f465c",
+                "on-secondary-container": "#6f5100",
+                "secondary-fixed-dim": "#f9bd22",
+                "on-error-container": "#93000a",
+                "surface-container": "#eceef0",
+                "on-surface": "#191c1e",
+                "on-secondary-fixed-variant": "#5c4300",
+                "on-tertiary-container": "#a4acc5",
+                "secondary-fixed": "#ffdf9f",
+                "outline-variant": "#c5c5d3",
+                "surface-container-low": "#f2f4f6",
+                "secondary-container": "#ffc329",
+                "on-primary-container": "#90a8ff",
+                "on-tertiary": "#ffffff",
+                "on-secondary": "#ffffff",
+                "surface-bright": "#f7f9fb",
+                "primary": "#00236f",
+                "on-background": "#191c1e",
+                "on-primary-fixed-variant": "#264191",
+                "tertiary": "#222a3e",
+                "surface-tint": "#4059aa",
+                "surface": "#f7f9fb",
+                "primary-fixed": "#dce1ff",
+                "outline": "#757682",
+                "primary-container": "#1e3a8a",
+                "surface-container-highest": "#e0e3e5",
+                "surface-variant": "#e0e3e5",
+                "tertiary-container": "#384055",
+                "error-container": "#ffdad6",
+                "secondary": "#795900",
+                "on-primary-fixed": "#00164e",
+                "primary-fixed-dim": "#b6c4ff",
+                "on-primary": "#ffffff",
+                "surface-container-high": "#e6e8ea",
+                "on-secondary-fixed": "#261a00",
+                "tertiary-fixed": "#dae2fd",
+                "surface-container-lowest": "#ffffff",
+                "on-tertiary-fixed": "#131b2e",
+                "tertiary-fixed-dim": "#bec6e0",
+                "on-surface-variant": "#444651",
+                "inverse-surface": "#2d3133",
+                "error": "#ba1a1a",
+                "on-error": "#ffffff",
+                "background": "#f7f9fb"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "stack-sm": "8px",
+                "stack-lg": "32px",
+                "margin-desktop": "32px",
+                "sidebar-width": "280px",
+                "margin-mobile": "16px",
+                "container-max": "1280px",
+                "stack-md": "16px",
+                "gutter": "24px"
+        },
+        "fontFamily": {
+                "code": [
+                        "Inter"
+                ],
+                "label-md": [
+                        "Inter"
+                ],
+                "display-lg": [
+                        "Inter"
+                ],
+                "body-sm": [
+                        "Inter"
+                ],
+                "headline-lg-mobile": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Inter"
+                ],
+                "headline-lg": [
+                        "Inter"
+                ]
+        },
+        "fontSize": {
+                "code": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="w-full top-0 sticky bg-surface border-b border-outline-variant z-50">
+<div class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary">Academia SIS</span>
+</div>
+<!-- Web Nav Links -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors duration-200" href="#">Admissions</a>
+<a class="text-primary border-b-2 border-secondary-container font-bold pb-1 hover:text-primary transition-colors duration-200 opacity-80 transition-opacity" href="#">Academics</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors duration-200" href="#">Campus Life</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors duration-200" href="#">Portals</a>
+</nav>
+<div class="hidden md:flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<button class="font-label-md text-label-md font-bold px-4 py-2 border border-primary text-primary rounded hover:bg-surface-container transition-colors">Login</button>
+<button class="font-label-md text-label-md font-bold px-4 py-2 bg-[#fbbf24] text-[#1e3a8a] rounded hover:bg-[#f59e0b] transition-colors">Apply Now</button>
+</div>
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="relative w-full h-[614px] min-h-[400px] flex items-center justify-center overflow-hidden bg-surface-container-high">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full opacity-60" data-alt="https://lh3.googleusercontent.com/aida-public/AB6AXuDsJHyNIUSbXDP1LRpx2yRrNDizIG51QuotzYJ8BK8pt768u1Ggu2euhLhI9m2H7xnpvjuwPiFMSQl9km_V7GYIgMW8Dy3J98sPToAiRTGDW271HEIAt8Uohlq8Ffz9ml6eac35CDIfehRgJWxQFgh12Kv8k5zpwDH0fmmjJSQZvMLemRGRLcU4t8LkXApP6dPGJt0woY0g2L-CHUPmfHy8rvv8H7wL7MQLNHWOnGnzS8j1wymZlg5atVGIA4keG_gM_CIcdNYQb3U" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDsJHyNIUSbXDP1LRpx2yRrNDizIG51QuotzYJ8BK8pt768u1Ggu2euhLhI9m2H7xnpvjuwPiFMSQl9km_V7GYIgMW8Dy3J98sPToAiRTGDW271HEIAt8Uohlq8Ffz9ml6eac35CDIfehRgJWxQFgh12Kv8k5zpwDH0fmmjJSQZvMLemRGRLcU4t8LkXApP6dPGJt0woY0g2L-CHUPmfHy8rvv8H7wL7MQLNHWOnGnzS8j1wymZlg5atVGIA4keG_gM_CIcdNYQb3U')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+<div class="relative z-10 text-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col items-center gap-stack-md">
+<h1 class="font-display-lg text-display-lg text-primary-container drop-shadow-md">Membentuk Generasi Cerdas Berkarakter</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl bg-surface/80 p-4 rounded backdrop-blur-sm">Selamat datang di Academia SIS. Kami berkomitmen untuk menyediakan pendidikan berkualitas tinggi, memadukan inovasi digital dengan nilai-nilai luhur untuk masa depan yang lebih baik.</p>
+<div class="flex gap-4 mt-stack-md">
+<button class="font-label-md text-label-md font-bold px-6 py-3 bg-primary text-on-primary rounded hover:bg-primary-container transition-colors shadow-sm">Info Pendaftaran</button>
+<button class="font-label-md text-label-md font-bold px-6 py-3 border border-primary text-primary bg-surface rounded hover:bg-surface-container transition-colors shadow-sm">Tur Virtual</button>
+</div>
+</div>
+</section>
+<!-- Quick Links Bento Grid -->
+<section class="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- PPDB Card -->
+<div class="group bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col gap-stack-sm hover:shadow-md transition-shadow cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px]" style="font-variation-settings: 'FILL' 1;">how_to_reg</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-[#f9bd22]/20 flex items-center justify-center text-[#b45309] mb-stack-sm">
+<span class="material-symbols-outlined">how_to_reg</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary-container">Info PPDB</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-grow">Informasi lengkap mengenai Penerimaan Peserta Didik Baru Tahun Ajaran 2024/2025. Persyaratan, alur, dan jadwal pendaftaran.</p>
+<div class="flex items-center text-primary font-label-md text-label-md mt-stack-md">
+                        Selengkapnya <span class="material-symbols-outlined ml-1 text-[18px]">arrow_forward</span>
+</div>
+</div>
+<!-- Academic Calendar Card -->
+<div class="group bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col gap-stack-sm hover:shadow-md transition-shadow cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px]" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary-container mb-stack-sm">
+<span class="material-symbols-outlined">calendar_month</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary-container">Kalender Akademik</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-grow">Jadwal kegiatan belajar mengajar, ujian, hari libur, dan acara penting sekolah sepanjang tahun akademik berjalan.</p>
+<div class="flex items-center text-primary font-label-md text-label-md mt-stack-md">
+                        Lihat Jadwal <span class="material-symbols-outlined ml-1 text-[18px]">arrow_forward</span>
+</div>
+</div>
+<!-- School Profile Card -->
+<div class="group bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col gap-stack-sm hover:shadow-md transition-shadow cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-[64px]" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-[#1e3a8a]/10 flex items-center justify-center text-[#1e3a8a] mb-stack-sm">
+<span class="material-symbols-outlined">school</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary-container">Profil Sekolah</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex-grow">Pelajari sejarah, visi misi, fasilitas unggulan, dan jajaran staf pengajar profesional yang berdedikasi di Academia SIS.</p>
+<div class="flex items-center text-primary font-label-md text-label-md mt-stack-md">
+                        Kenali Kami <span class="material-symbols-outlined ml-1 text-[18px]">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- About Us Snippet -->
+<section class="py-stack-lg bg-surface-container-low border-y border-outline-variant">
+<div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row items-center gap-gutter">
+<div class="w-full md:w-1/2 flex flex-col gap-stack-md">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest">Tentang Kami</span>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Institusi Pendidikan Terkemuka dengan Fasilitas Modern</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Sejak didirikan, Academia SIS terus bertransformasi menjadi pusat keunggulan akademik. Kami percaya bahwa lingkungan belajar yang kondusif, didukung oleh teknologi terkini, adalah kunci untuk mencetak pemimpin masa depan. Kurikulum kami dirancang untuk menantang pemikiran kritis sekaligus menumbuhkan empati sosial.</p>
+<ul class="flex flex-col gap-2 mt-stack-sm text-on-surface-variant font-body-sm text-body-sm">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">check_circle</span> Akreditasi A Berstandar Nasional</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">check_circle</span> Laboratorium Sains &amp; Komputer Lengkap</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">check_circle</span> Tenaga Pengajar Tersertifikasi</li>
+</ul>
+<button class="mt-stack-md font-label-md text-label-md font-bold px-6 py-2 border border-primary text-primary w-fit rounded hover:bg-primary hover:text-on-primary transition-colors">Baca Sejarah Kami</button>
+</div>
+<div class="w-full md:w-1/2 mt-stack-md md:mt-0">
+<img class="w-full h-[400px] object-cover rounded-xl shadow-sm border border-outline-variant" data-alt="A brightly lit modern school library interior. Long wooden study tables surrounded by comfortable chairs. Walls lined with tall bookshelves filled with books. Large floor-to-ceiling windows letting in natural sunlight. Several students quietly reading or working on laptops. High quality architectural interior photography, inviting and academic mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXuLWAKzsvZ89Z_GWu2uMzSdONy_6Fgi1mvmXVyZo9lP_lbyJX00iGevLVPNzSQbcRZKrLG_g-xJ-Scxn7eAWhettx15Emj_h1GS9Gi0pMxr7gGGCrpndETF7_Hm0qF5ixx_sc99yoZEQSgwTvGmWuLi59_bZpNp_XePTz7QTBBR7JkQ38gYfdODAZkK3FASm8gAJnx_u8E-fMwPgQlnpVyAJMBatPmJt2loYvz2RnklLW83J7QdXN1ixRy-dJWpCExFxpvj7S02I"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Latest News Section -->
+<section class="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-stack-lg">
+<div class="flex justify-between items-end mb-stack-md">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Berita Terbaru</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Informasi dan kegiatan terkini dari lingkungan sekolah.</p>
+</div>
+<a class="hidden md:flex items-center text-primary font-label-md text-label-md hover:underline" href="#">
+                    Semua Berita <span class="material-symbols-outlined ml-1 text-[18px]">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- News Card 1 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+<img class="w-full h-48 object-cover border-b border-outline-variant" data-alt="https://lh3.googleusercontent.com/aida-public/AB6AXuAQgQ2rVDACCdclr0lzmGVwLJMTF-OqIvU2qnq7f2HE48iTUUMYD5FkbbYOf8SdH-Z3aAIfA_EibvZU_iMIsUGJztINLF9bxvkIHt9r0chcO-j9qty6moqWQJ5Ixw0tcK_bVVb5lWyilFHSRpS7xBWW0KW9U9wDYNC_1m9Xm6jubc16wLcYYtef2RaSxCBWASMN3aIlRasfeVW6BqaNJuC1xusHPcBbhmwS8zO4oa5Kpn7mwUrp5eZrivUUcD8gVj32g2HzxRaLJAY" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQgQ2rVDACCdclr0lzmGVwLJMTF-OqIvU2qnq7f2HE48iTUUMYD5FkbbYOf8SdH-Z3aAIfA_EibvZU_iMIsUGJztINLF9bxvkIHt9r0chcO-j9qty6moqWQJ5Ixw0tcK_bVVb5lWyilFHSRpS7xBWW0KW9U9wDYNC_1m9Xm6jubc16wLcYYtef2RaSxCBWASMN3aIlRasfeVW6BqaNJuC1xusHPcBbhmwS8zO4oa5Kpn7mwUrp5eZrivUUcD8gVj32g2HzxRaLJAY"/>
+<div class="p-stack-md flex flex-col gap-stack-sm h-[200px]">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> 15 Mei 2024
+                        </div>
+<h3 class="font-headline-md text-[18px] leading-tight text-on-surface line-clamp-2">Tim Robotik Sekolah Raih Juara 1 Tingkat Nasional</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">Prestasi membanggakan kembali ditorehkan oleh siswa-siswi kita dalam kompetisi teknologi tahunan yang diselenggarakan oleh Kementrian Pendidikan.</p>
+</div>
+</article>
+<!-- News Card 2 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+<img class="w-full h-48 object-cover border-b border-outline-variant" data-alt="https://lh3.googleusercontent.com/aida-public/AB6AXuDUfrT0LEOz1pMt5W9jm6hpDiiBMSGbKp6Ye17IOxJRA3D15kLv5Uk19bsf4KgTkkBWF9Nv_YfYi2XvlQWJfF02lNnNugwa5rNrpRSQCsbgde96tFxTHqatCbBaYX5Whtdl-mPQvZdIlKBpmfsMP6mYwOsIMrgHn25d0agmeq45cCUwtVXB22taDQ_ua_lbvOWqbwqSGoqmSukYdRyxOypHdc22wlwkqQVpT7xZ1AgiXvpHqhUu8EUOPMNgvsrF3N9zOIwXZJkGoEI" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUfrT0LEOz1pMt5W9jm6hpDiiBMSGbKp6Ye17IOxJRA3D15kLv5Uk19bsf4KgTkkBWF9Nv_YfYi2XvlQWJfF02lNnNugwa5rNrpRSQCsbgde96tFxTHqatCbBaYX5Whtdl-mPQvZdIlKBpmfsMP6mYwOsIMrgHn25d0agmeq45cCUwtVXB22taDQ_ua_lbvOWqbwqSGoqmSukYdRyxOypHdc22wlwkqQVpT7xZ1AgiXvpHqhUu8EUOPMNgvsrF3N9zOIwXZJkGoEI"/>
+<div class="p-stack-md flex flex-col gap-stack-sm h-[200px]">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> 10 Mei 2024
+                        </div>
+<h3 class="font-headline-md text-[18px] leading-tight text-on-surface line-clamp-2">Pekan Olahraga Antar Kelas (PORAK) Resmi Dibuka</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">Meningkatkan sportivitas dan kerjasama tim, PORAK tahun ini menghadirkan cabang olahraga baru dan diikuti oleh seluruh perwakilan kelas.</p>
+</div>
+</article>
+<!-- News Card 3 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+<img class="w-full h-48 object-cover border-b border-outline-variant" data-alt="https://lh3.googleusercontent.com/aida-public/AB6AXuAkwcDHZyRtuyS11bibQdQDXqR5Jh2YucrLMMBlKlyFuswMjbOqzhfejp0k8d11OvGB-0DP0V4sGoEb_B9s2dhxhU_hlVY86BYLlyt8bHpnx2mm3-NAeS1WUCYb4TQ76l9yD8xqB56zlblf0qQWKrZnVvthttrgRht9PeJWex5rSQqlKJJ5AjIldRoclgN2fyag0ZG7a5dayKz9OjVv_qTg0Tuzk_ENYigbB4hHX7rS6lVgLtG3b4w4CNW1UmLYi0mUfKJKLFp-rsM" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkwcDHZyRtuyS11bibQdQDXqR5Jh2YucrLMMBlKlyFuswMjbOqzhfejp0k8d11OvGB-0DP0V4sGoEb_B9s2dhxhU_hlVY86BYLlyt8bHpnx2mm3-NAeS1WUCYb4TQ76l9yD8xqB56zlblf0qQWKrZnVvthttrgRht9PeJWex5rSQqlKJJ5AjIldRoclgN2fyag0ZG7a5dayKz9OjVv_qTg0Tuzk_ENYigbB4hHX7rS6lVgLtG3b4w4CNW1UmLYi0mUfKJKLFp-rsM"/>
+<div class="p-stack-md flex flex-col gap-stack-sm h-[200px]">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> 05 Mei 2024
+                        </div>
+<h3 class="font-headline-md text-[18px] leading-tight text-on-surface line-clamp-2">Peresmian Laboratorium Sains Terpadu Baru</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">Fasilitas lab baru dilengkapi dengan peralatan mutakhir untuk mendukung pembelajaran praktikum Fisika, Kimia, dan Biologi yang lebih komprehensif.</p>
+</div>
+</article>
+<!-- News Card 4 -->
+<article class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:-translate-y-1 transition-transform duration-200">
+<img class="w-full h-48 object-cover border-b border-outline-variant" data-alt="A formal meeting setup in a school conference room. Several adults, some parents and some teachers, are sitting around a large wooden table discussing. A presentation is visible on a screen in the background. Professional, collaborative, and serious mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApsRi2SS9t4UW4hoPrKt7qYH9aXnl1yB04jODVLj-lNm5_JFSNHk_TU9-NTwLsS9b3apGgtVtVX2JnPBUSunV4dhP4LC6WjK9dB2Zkn1LSo8FyOSTXN9zkqPNQC59j0D24qbkRmTYxqVu4krrz5V19UG7iw8HMkr-1uoIbwVd8cCLIZkTacH1aljqpDYyvOuORxDY2mXSdARddgo-v9mFLlVM1BcJOX6zKnlh4akt6vXtGacsb6f8nMilD92HdsEEI4Fxl2Z05Eg8"/>
+<div class="p-stack-md flex flex-col gap-stack-sm h-[200px]">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span> 28 April 2024
+                        </div>
+<h3 class="font-headline-md text-[18px] leading-tight text-on-surface line-clamp-2">Rapat Pertemuan Orang Tua Wali Murid Semester Genap</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">Agenda penting membahas evaluasi pembelajaran tengah semester dan rencana program pengembangan karakter siswa kedepannya.</p>
+</div>
+</article>
+</div>
+<a class="md:hidden mt-stack-md flex justify-center items-center text-primary font-label-md text-label-md hover:underline w-full py-2 border border-outline-variant rounded bg-surface-container-lowest" href="#">
+                Lihat Semua Berita
+            </a>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-stack-lg bg-surface-container-highest border-t border-outline-variant mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full gap-stack-md">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-headline-md text-headline-md font-bold text-primary">Academia SIS</span>
+<span class="text-on-background font-body-sm text-body-sm mt-2">© 2024 Academia SIS. All Rights Reserved.</span>
+</div>
+<nav class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline transition-all focus:ring-2 focus:ring-primary rounded" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline transition-all focus:ring-2 focus:ring-primary rounded" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline transition-all focus:ring-2 focus:ring-primary rounded" href="#">Accessibility</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:underline transition-all focus:ring-2 focus:ring-primary rounded" href="#">Contact Us</a>
+</nav>
+</div>
+</footer>
+</body></html>

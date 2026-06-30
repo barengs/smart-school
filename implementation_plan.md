@@ -1,58 +1,58 @@
-# Sistem Informasi Sekolah (SIS) - Rencana Implementasi & Daftar Tugas
+# Rencana Integrasi Frontend dan Backend API
 
-Dokumen ini menguraikan rencana implementasi langkah demi langkah untuk Sistem Informasi Sekolah berdasarkan blueprint.
+Rencana ini bertujuan untuk menghubungkan antarmuka pengguna (React SPA) yang saat ini menggunakan data *dummy* statis dengan backend API Laravel untuk menampilkan dan mengirimkan data secara dinamis.
 
-## Catatan Penting
-- **Database**: MySQL.
-- **JWT**: `php-open-source-saver/jwt-auth`.
-- **Seeder**: Dibuat terpisah berdasarkan modul. Seeder CMS akan menggunakan data yang tampak senormal/se-original mungkin.
+## Open Questions
 
-## Daftar Tugas
+- **Detail Berita (`/api/public/news/{slug}`)**: Saat ini *route* frontend menggunakan ID (`/news/:id`), sedangkan API menggunakan *slug*. Saya akan mengubah *routing* frontend agar menggunakan *slug* (`/news/:slug`) agar selaras dengan API dan lebih ramah SEO. Apakah disetujui?
+- **Pemuatan Gambar**: Endpoint API mungkin mengembalikan URL relatif atau absolut untuk gambar. Apakah kita sudah menyiapkan mekanisme upload gambar (storage link), atau masih menggunakan URL bawaan dari seeder? (Saya akan menyesuaikan jika menggunakan `storage/`).
 
-### 1. Setup Proyek & Dependensi
-- [ ] Instal Dependensi Frontend: `react`, `react-dom`, `react-router-dom`, `@vitejs/plugin-react`, `axios`, `tailwindcss`, `postcss`, `autoprefixer`.
-- [ ] Instal Dependensi Backend: `php-open-source-saver/jwt-auth`, `spatie/laravel-permission`.
-- [ ] Konfigurasi Vite untuk React dan TailwindCSS.
-- [ ] Publish dan konfigurasi JWT serta Spatie Permission.
+## Proposed Changes
 
-### 2. Migrasi Database, Model & Seeder
-- [ ] **Spatie Overrides**: Tambahkan `menu_id` ke tabel `permissions` untuk Matrix Role Menu.
-- [ ] **Menus**: Migrasi, Model, dan Seeder untuk struktur menu dinamis admin.
-- [ ] **RBAC**: Seeder Role & Permission (Super Admin, Editor, Reviewer PPDB).
-- [ ] **Users**: Seeder akun Super Admin dan beberapa akun dummy.
-- [ ] **School Profiles**: Migrasi, Model, dan Seeder (tabel baris tunggal) dengan data sekolah normal.
-- [ ] **CMS (Categories & News)**: Migrasi, Model, dan Seeder artikel realistik (bukan sekadar lorem ipsum).
-- [ ] **Organization Structures**: Migrasi, Model, dan Seeder struktur guru/staf.
-- [ ] **PPDB Registrations**: Migrasi, Model, dan Seeder data pendaftar simulasi.
+### Komponen Publik
 
-### 3. Pengembangan API Backend (Laravel)
-- [ ] **Autentikasi**: JWT Auth Controller (Login, Logout, Me).
-- [ ] **Menu & Akses Dinamis**: Middleware pemeriksaan hak akses Matrix; endpoint untuk mengambil menu dinamis.
-- [ ] **API Controllers**:
-  - [ ] `ProfileController`
-  - [ ] `NewsController`
-  - [ ] `PPDBController`
-  - [ ] `RolePermissionController`
-- [ ] **Routes**: Konfigurasi `routes/api.php` dengan `auth:api` dan middleware matrix.
+#### [MODIFY] [Home.jsx](file:///c:/Users/Della/Development/smartschool/resources/js/pages/public/Home.jsx)
+- Menggunakan `useEffect` dan `axios` untuk memuat data profil sekolah (untuk teks pendaftaran/profil).
+- Mengambil 4 berita terbaru dari endpoint `GET /api/public/news` dan menampilkannya di *grid*.
 
-### 4. Pengembangan Frontend SPA (React)
-- [ ] **Setup React**: Mount di `welcome.blade.php`.
-- [ ] **Axios Interceptor**: Konfigurasi header Bearer JWT otomatis.
-- [ ] **Router & Layout**:
-  - [ ] Rute Publik (Home, Profil, Berita, PPDB).
-  - [ ] Rute Admin (Login, Dashboard, Manajemen Modul) dengan Sidebar Dinamis.
-- [ ] **UI Publik**:
-  - [ ] Beranda
-  - [ ] Profil Sekolah
-  - [ ] Berita (Daftar & Detail)
-  - [ ] Form PPDB
-- [ ] **UI Admin (CMS)**:
-  - [ ] Halaman Login
-  - [ ] Form Profil Sekolah
-  - [ ] Manajemen Berita (CRUD + Approve)
-  - [ ] Manajemen PPDB (Verifikasi)
-  - [ ] Manajemen Role, User & Matrix Menu
+#### [MODIFY] [SchoolProfile.jsx](file:///c:/Users/Della/Development/smartschool/resources/js/pages/public/SchoolProfile.jsx)
+- Mengambil data dari endpoint `GET /api/public/profile`.
+- Menampilkan teks Sejarah, Visi, Misi yang diambil dari database (dari backend).
 
-### 5. Penyelesaian
-- [ ] Pengujian manual alur autentikasi dan matrix akses.
-- [ ] Pengujian alur publikasi berita dan registrasi PPDB.
+#### [MODIFY] [PublicNews.jsx](file:///c:/Users/Della/Development/smartschool/resources/js/pages/public/PublicNews.jsx)
+- Mengambil daftar seluruh berita dari `GET /api/public/news`.
+- Implementasi *loading state* dan mapping data ke dalam daftar kartu berita.
+- Memperbarui tautan berita agar mengarah ke `/news/:slug`.
+
+#### [MODIFY] [PublicNewsDetail.jsx](file:///c:/Users/Della/Development/smartschool/resources/js/pages/public/PublicNewsDetail.jsx)
+- Mengambil data *slug* dari parameter URL (`useParams`).
+- Memuat detail berita dari endpoint `GET /api/public/news/{slug}`.
+- Menangani kondisi data tidak ditemukan (404).
+
+#### [MODIFY] [PublicPPDB.jsx](file:///c:/Users/Della/Development/smartschool/resources/js/pages/public/PublicPPDB.jsx)
+- Menangkap *value* dari seluruh form pendaftaran.
+- Melakukan POST request ke `POST /api/public/ppdb`.
+- Menampilkan nomor registrasi yang dikembalikan dari backend ke layar sukses.
+
+### Komponen Admin
+
+#### [MODIFY] [Login.jsx](file:///c:/Users/Della/Development/smartschool/resources/js/pages/admin/Login.jsx)
+- Menangkap email dan password.
+- Melakukan request ke `POST /api/auth/login`.
+- Menyimpan *Bearer Token* di `localStorage`.
+- *Redirect* ke `/admin` setelah berhasil masuk.
+- Menampilkan pesan error jika otentikasi gagal.
+
+#### [MODIFY] [router.jsx](file:///c:/Users/Della/Development/smartschool/resources/js/router.jsx)
+- Mengubah rute berita detail dari `<Route path="/news/:id" ... />` menjadi `<Route path="/news/:slug" ... />`.
+
+## Verification Plan
+
+### Automated Tests
+- Menjalankan `npm run build` untuk memastikan tidak ada kesalahan kompilasi pada komponen React yang diupdate.
+
+### Manual Verification
+- **Profil Sekolah**: Buka `/profile` dan pastikan data berasal dari database.
+- **Berita**: Buka halaman Beranda dan `/news` untuk memastikan data berita dan tautan dinamis berfungsi dengan baik.
+- **Form PPDB**: Lakukan pengisian form secara penuh dan periksa apakah data tersimpan di tabel `ppdb_registrations`.
+- **Login Admin**: Masuk menggunakan akun admin untuk memastikan token JWT disimpan dan berhasil diarahkan ke dashboard admin.
