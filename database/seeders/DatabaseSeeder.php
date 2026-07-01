@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
             SchoolProfileSeeder::class,
             CmsSeeder::class,
             OrganizationStructureSeeder::class,
+            AcademicCalendarSeeder::class,
+            ContactMenuSeeder::class,
+            PpdbMasterSeeder::class,
             PpdbRegistrationSeeder::class,
         ]);
     }
