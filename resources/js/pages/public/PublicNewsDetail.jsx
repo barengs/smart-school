@@ -6,11 +6,11 @@ import { fetchNewsDetail, clearCurrentNews, fetchNews } from '../../store/newsSl
 const PublicNewsDetail = () => {
     const { slug } = useParams();
     const dispatch = useDispatch();
-    const { currentNews, newsList, loading, error } = useSelector((state) => state.news);
+    const { currentNews, newsList, loading, error, initializedPublic } = useSelector((state) => state.news);
 
     useEffect(() => {
         dispatch(fetchNewsDetail(slug));
-        if (newsList.length === 0) {
+        if (!initializedPublic) {
             dispatch(fetchNews()); // Fetch popular/recent news for sidebar if not loaded
         }
         return () => {
@@ -19,7 +19,31 @@ const PublicNewsDetail = () => {
     }, [dispatch, slug]);
 
     if (loading) {
-        return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>;
+        return (
+            <div className="bg-surface min-h-[calc(100vh-80px)] py-stack-lg font-body-md animate-pulse">
+                <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+                    <div className="mb-stack-md w-48 h-6 bg-surface-container-high rounded-md"></div>
+                    <div className="flex flex-col lg:flex-row gap-gutter">
+                        <div className="lg:w-2/3">
+                            <div className="w-full h-[400px] bg-surface-container-high rounded-xl mb-stack-md"></div>
+                            <div className="w-64 h-8 bg-surface-container-high rounded-md mb-4"></div>
+                            <div className="w-full h-10 bg-surface-container-high rounded-md mb-4"></div>
+                            <div className="w-3/4 h-10 bg-surface-container-high rounded-md mb-stack-md"></div>
+                            <div className="w-full h-4 bg-surface-container-high rounded-md mb-2"></div>
+                            <div className="w-full h-4 bg-surface-container-high rounded-md mb-2"></div>
+                            <div className="w-full h-4 bg-surface-container-high rounded-md mb-2"></div>
+                            <div className="w-2/3 h-4 bg-surface-container-high rounded-md"></div>
+                        </div>
+                        <div className="lg:w-1/3">
+                            <div className="w-48 h-8 bg-surface-container-high rounded-md mb-stack-md"></div>
+                            <div className="w-full h-24 bg-surface-container-high rounded-lg mb-4"></div>
+                            <div className="w-full h-24 bg-surface-container-high rounded-lg mb-4"></div>
+                            <div className="w-full h-24 bg-surface-container-high rounded-lg"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     if (error || !currentNews) {

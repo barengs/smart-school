@@ -15,14 +15,31 @@ axios.interceptors.request.use((config) => {
     return config;
 });
 
+axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 import { Provider } from 'react-redux';
 import { store } from './store';
+
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
     return (
         <React.StrictMode>
             <Provider store={store}>
                 <BrowserRouter>
+                    <Toaster position="top-right" />
                     <AppRouter />
                 </BrowserRouter>
             </Provider>
@@ -30,5 +47,9 @@ const App = () => {
     );
 };
 
-const root = createRoot(document.getElementById('root'));
+let root = window.reactRoot;
+if (!root) {
+    root = createRoot(document.getElementById('root'));
+    window.reactRoot = root;
+}
 root.render(<App />);

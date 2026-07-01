@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const InfoPPDB = () => {
+    const [info, setInfo] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axios.get('/public/ppdb/info')
+            .then(res => {
+                setInfo(res.data);
+            })
+            .catch(err => console.error(err))
+            .finally(() => setLoading(false));
+    }, []);
+
+    const activeBatch = info?.batches && info.batches.length > 0 ? info.batches[0] : null;
+
     return (
         <div className="bg-surface min-h-[calc(100vh-80px)] py-stack-lg font-body-md">
             <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
                 
                 <div className="text-center mb-stack-lg max-w-3xl mx-auto">
-                    <h1 className="font-display-lg text-[40px] text-on-surface mb-4">Informasi PPDB 2024/2025</h1>
+                    <h1 className="font-display-lg text-[40px] text-on-surface mb-4">
+                        Informasi PPDB {info?.name ? info.name : 'Terbaru'}
+                    </h1>
                     <p className="font-body-lg text-body-lg text-on-surface-variant">
                         Selamat datang di portal informasi Penerimaan Peserta Didik Baru Academia SIS. Kami mengundang putra-putri terbaik untuk bergabung dan berkembang bersama institusi pendidikan yang mengedepankan karakter dan prestasi.
                     </p>
@@ -40,12 +57,30 @@ const InfoPPDB = () => {
                 <div className="bg-surface-container-low rounded-xl p-stack-lg border border-outline-variant flex flex-col md:flex-row items-center gap-gutter">
                     <div className="md:w-2/3">
                         <h2 className="font-headline-lg text-headline-lg text-on-surface mb-2">Siap Mendaftar?</h2>
-                        <p className="font-body-md text-body-md text-on-surface-variant mb-6 md:mb-0">Pendaftaran gelombang pertama dibuka hingga 30 November 2024. Kuota sangat terbatas, segera daftarkan putra/putri Anda hari ini.</p>
+                        {loading ? (
+                            <div className="h-4 bg-surface-container-highest rounded w-1/2 animate-pulse mb-6 md:mb-0"></div>
+                        ) : activeBatch ? (
+                            <p className="font-body-md text-body-md text-on-surface-variant mb-6 md:mb-0">
+                                Pendaftaran {activeBatch.name} dibuka hingga {new Date(activeBatch.end_date).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}. 
+                                {activeBatch.quota ? ` Kuota terbatas untuk ${activeBatch.quota} pendaftar.` : ' Kuota sangat terbatas.'} 
+                                Segera daftarkan putra/putri Anda hari ini.
+                            </p>
+                        ) : (
+                            <p className="font-body-md text-body-md text-on-surface-variant mb-6 md:mb-0">
+                                Saat ini belum ada gelombang pendaftaran yang dibuka. Silakan pantau terus informasi dari kami.
+                            </p>
+                        )}
                     </div>
                     <div className="md:w-1/3 flex justify-end w-full">
-                        <Link to="/form-ppdb" className="w-full md:w-auto text-center font-label-md text-label-md font-bold px-8 py-4 bg-primary text-on-primary rounded hover:bg-primary-container transition-colors shadow-sm">
-                            Mulai Pendaftaran Online
-                        </Link>
+                        {activeBatch ? (
+                            <Link to="/form-ppdb" className="w-full md:w-auto text-center font-label-md text-label-md font-bold px-8 py-4 bg-primary text-on-primary rounded hover:bg-primary-container transition-colors shadow-sm">
+                                Mulai Pendaftaran Online
+                            </Link>
+                        ) : (
+                            <button disabled className="w-full md:w-auto text-center font-label-md text-label-md font-bold px-8 py-4 bg-surface-container-highest text-on-surface-variant rounded cursor-not-allowed">
+                                Pendaftaran Ditutup
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

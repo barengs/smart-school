@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('route_path')->nullable();
+            $table->string('label');
+            $table->string('url')->nullable();
             $table->string('icon')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('menus')->onDelete('cascade');
-            $table->integer('order_number')->default(0);
+            $table->integer('sort_order')->default(0);
+            $table->string('type')->default('front'); // front, admin
             $table->timestamps();
         });
     }

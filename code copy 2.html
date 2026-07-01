@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academia SIS - Membentuk Generasi Cerdas Berkarakter</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Theme Config Verbatim -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#795900",
+                    "on-primary-fixed": "#00164e",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#f7f9fb",
+                    "surface-container-high": "#e6e8ea",
+                    "secondary-fixed": "#ffdf9f",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-tertiary-fixed": "#131b2e",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#b6c4ff",
+                    "tertiary": "#222a3e",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "surface-variant": "#e0e3e5",
+                    "on-tertiary-container": "#a4acc5",
+                    "on-secondary-fixed-variant": "#5c4300",
+                    "primary-container": "#1e3a8a",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#384055",
+                    "secondary-container": "#ffc329",
+                    "on-primary-container": "#90a8ff",
+                    "outline": "#757682",
+                    "surface-tint": "#4059aa",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container": "#eceef0",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#f9bd22",
+                    "on-background": "#191c1e",
+                    "surface-container-highest": "#e0e3e5",
+                    "inverse-surface": "#2d3133",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#dae2fd",
+                    "on-primary-fixed-variant": "#264191",
+                    "on-surface-variant": "#444651",
+                    "on-secondary-container": "#6f5100",
+                    "surface": "#f7f9fb",
+                    "primary-fixed": "#dce1ff",
+                    "on-surface": "#191c1e",
+                    "outline-variant": "#c5c5d3",
+                    "on-secondary-fixed": "#261a00",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "surface-bright": "#f7f9fb",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#00236f",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "surface-dim": "#d8dadc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "gutter": "24px",
+                    "sidebar-width": "280px",
+                    "margin-mobile": "16px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "code": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "code": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        /* Custom Academic Theme Overrides */
+        .academic-gradient {
+            background: linear-gradient(135deg, rgba(0, 35, 111, 0.9) 0%, rgba(30, 58, 138, 0.7) 100%);
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+<!-- TopNavBar (Shared Component JSON Source) -->
+<header class="w-full top-0 sticky z-50 bg-surface dark:bg-on-background border-b border-outline-variant dark:border-outline">
+<div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary">Academia SIS</span>
+</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-primary dark:text-inverse-primary border-b-2 border-secondary-container font-bold pb-1 hover:text-primary dark:hover:text-inverse-primary transition-colors duration-200" href="#">Admissions</a>
+<a class="text-on-surface-variant dark:text-on-tertiary-container font-body-md text-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors duration-200" href="#">Academics</a>
+<a class="text-on-surface-variant dark:text-on-tertiary-container font-body-md text-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors duration-200" href="#">Campus Life</a>
+<a class="text-on-surface-variant dark:text-on-tertiary-container font-body-md text-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors duration-200" href="#">Portals</a>
+</nav>
+<div class="flex items-center gap-6">
+<div class="hidden sm:flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">help_outline</span>
+</div>
+<button class="hidden lg:block px-6 py-2 bg-secondary text-on-secondary font-label-md rounded-full hover:opacity-90 transition-opacity">Apply Now</button>
+<button class="px-6 py-2 border border-primary text-primary font-label-md rounded-full hover:bg-primary/5 transition-colors">Login</button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative min-h-[85vh] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Main School Campus" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLupnXtenOj3_QsQRaP0kbrPOe9Wi1CwsCj3J9-1WLZlSG5PfnYxLQaKbvAzKh-sWBO6C4WwePD9euAvaLbAl2vSUUPIPBVqENjgXeN5AYTzND5FjM-sGuMTAF9hy0BxnnKkdQ9Gbz5MWF4Nl_FJ01RPmYOGNmpv_8llwKH9E7lkjTusko3HX5kdqKytgvbswpXwkx79BoEsubwUmM7_WsjfA-4jRSV0xm6INdGvW1zw0uHUkWjDTfSfpA"/>
+<div class="absolute inset-0 academic-gradient"></div>
+</div>
+<div class="relative z-10 w-full px-margin-desktop max-w-container-max mx-auto py-stack-lg">
+<div class="max-w-2xl text-white">
+<span class="inline-block px-4 py-1 bg-secondary-container text-on-secondary-container font-label-md rounded-full mb-6">Penerimaan Siswa Baru 2024/2025</span>
+<h1 class="font-display-lg text-display-lg mb-6 leading-tight">Membentuk Generasi Cerdas Berkarakter</h1>
+<p class="font-body-lg text-body-lg mb-10 text-on-primary-container opacity-90">Pendidikan berkualitas tinggi dengan nilai-nilai luhur Islam untuk mempersiapkan pemimpin masa depan yang berwawasan global.</p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-secondary-container text-on-secondary-container px-10 py-4 rounded-full font-headline-md hover:scale-105 transition-transform flex items-center gap-2">
+                        Info Pendaftaran
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 py-4 rounded-full font-headline-md hover:bg-white/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">explore</span>
+                        Tur Virtual
+                    </button>
+</div>
+</div>
+</div>
+<!-- Floating Quick Stats (Layout inspiration from image_3) -->
+<div class="absolute bottom-12 right-margin-desktop hidden xl:flex gap-6">
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-lg flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">groups</span>
+</div>
+<div>
+<div class="font-headline-md text-primary">1,200+</div>
+<div class="font-body-sm text-on-surface-variant">Siswa Aktif</div>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-lg flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">verified</span>
+</div>
+<div>
+<div class="font-headline-md text-primary">A+</div>
+<div class="font-body-sm text-on-surface-variant">Akreditasi</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature Grid Section -->
+<section class="py-stack-lg bg-surface-container-low">
+<div class="w-full px-margin-desktop max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Info PPDB Card -->
+<div class="group bg-white p-8 rounded-2xl border border-outline-variant hover:border-secondary transition-all hover:shadow-xl">
+<div class="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mb-6 group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:text-on-secondary-container">assignment</span>
+</div>
+<h3 class="font-headline-md text-primary mb-3">Info PPDB</h3>
+<p class="font-body-md text-on-surface-variant mb-6">Panduan lengkap pendaftaran siswa baru, biaya pendidikan, dan persyaratan administrasi.</p>
+<a class="text-secondary font-label-md flex items-center gap-2 hover:underline" href="#">Pelajari Selengkapnya <span class="material-symbols-outlined text-sm">open_in_new</span></a>
+</div>
+<!-- Kalender Akademik Card -->
+<div class="group bg-white p-8 rounded-2xl border border-outline-variant hover:border-secondary transition-all hover:shadow-xl">
+<div class="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mb-6 group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:text-on-secondary-container">calendar_today</span>
+</div>
+<h3 class="font-headline-md text-primary mb-3">Kalender Akademik</h3>
+<p class="font-body-md text-on-surface-variant mb-6">Jadwal kegiatan belajar mengajar, ujian, dan hari libur sekolah tahun ajaran 2024/2025.</p>
+<a class="text-secondary font-label-md flex items-center gap-2 hover:underline" href="#">Lihat Jadwal <span class="material-symbols-outlined text-sm">open_in_new</span></a>
+</div>
+<!-- Profil Sekolah Card -->
+<div class="group bg-white p-8 rounded-2xl border border-outline-variant hover:border-secondary transition-all hover:shadow-xl">
+<div class="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mb-6 group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:text-on-secondary-container">account_balance</span>
+</div>
+<h3 class="font-headline-md text-primary mb-3">Profil Sekolah</h3>
+<p class="font-body-md text-on-surface-variant mb-6">Visi, misi, dan sejarah perjalanan Academia SIS dalam membangun peradaban islami.</p>
+<a class="text-secondary font-label-md flex items-center gap-2 hover:underline" href="#">Kenali Kami <span class="material-symbols-outlined text-sm">open_in_new</span></a>
+</div>
+</div>
+</div>
+</section>
+<!-- Program Unggulan (Course/Program Section) -->
+<section class="py-stack-lg bg-white">
+<div class="w-full px-margin-desktop max-w-container-max mx-auto">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="font-headline-lg text-primary">Program Unggulan</h2>
+<p class="font-body-md text-on-surface-variant mt-2">Kurikulum terintegrasi untuk kecemerlangan akademik dan spiritual.</p>
+</div>
+<button class="text-primary font-label-md border-b-2 border-primary pb-1 hover:text-secondary hover:border-secondary transition-all">Lihat Semua Program</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Program Card 1 -->
+<div class="bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant group">
+<div class="h-56 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A serene indoor prayer space with natural sunlight streaming through high windows, featuring Islamic geometric patterns on the walls. A small group of young students in modest school uniforms are sitting in a circle practicing Quran recitation with their teacher. The atmosphere is peaceful and scholarly, with warm wood tones and soft focus backgrounds." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJyNplEe95m4aGQXW6ACWveLjcEQdgRHAq4XHpC2i2697CI8vCsWWW4f4PNFV1Xc11xbg4GnHahWCNlQSPXsZM-r9D0v3vbmTgVviFY6M5rQba7czRDXTUdNpvE-zfkGt9XXoj6d31-8mp5-Xp2-T8Z2GGBHnk-eUB2KfZROLB6oOhlV6O8meBoyJCxsj41BkHeAigI0GM7VjFr5VQaLLm12zBddLIreGcVGihLrC_1_XfRaJ-7WrZlvd81uPyJ0CwJEDjY5n82U0"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-4 py-1 rounded-full font-label-md">Spiritual</div>
+</div>
+<div class="p-8">
+<h4 class="font-headline-md text-primary mb-3">Tahfidz Qur'an</h4>
+<p class="font-body-md text-on-surface-variant mb-6">Program menghafal Al-Qur'an dengan metode talaqqi yang dipandu oleh ustadz berpengalaman.</p>
+<div class="flex items-center gap-4 text-on-surface-variant text-sm border-t border-outline-variant pt-6">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 10 Jam/Minggu</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">star</span> Target 5 Juz</span>
+</div>
+</div>
+</div>
+<!-- Program Card 2 -->
+<div class="bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant group">
+<div class="h-56 relative overflow-hidden">
+<img alt="Robotics Program" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida/AP1WRLvFXuyTfxvO8nrnf-GE8zynz71UpuiTJ6PtLytF4yXsnfMqOu89FGDWuGZrMd_BDZCTiXu8kaSSBXrKuJFZPVNxqVd9_MJ_VwffNK_ovdSawUGUmOLhJstAMzWdHabTvAwxN0GF7l_UWsrhy6I_TUwnsCcuGtcg8_P2Rxn8OGfCbWvv8PJAyS-HAY8Z2lLe3ZbytvvMuWUY3xFueleU54z1f4gtHmeumwO9KKy3jnOW7tEFMCc3bJkkeIU"/>
+<div class="absolute top-4 left-4 bg-primary text-on-primary px-4 py-1 rounded-full font-label-md">Modern Tech</div>
+</div>
+<div class="p-8">
+<h4 class="font-headline-md text-primary mb-3">Sains &amp; Robotik</h4>
+<p class="font-body-md text-on-surface-variant mb-6">Pengembangan logika dan kreativitas melalui coding, eksperimen sains, dan pembuatan robot.</p>
+<div class="flex items-center gap-4 text-on-surface-variant text-sm border-t border-outline-variant pt-6">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">science</span> STEM Lab</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">bolt</span> Ekskul Pilihan</span>
+</div>
+</div>
+</div>
+<!-- Program Card 3 -->
+<div class="bg-surface-container-low rounded-2xl overflow-hidden border border-outline-variant group">
+<div class="h-56 relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A modern, brightly lit classroom where students are actively participating in a language lesson. The walls are decorated with world maps and flags of different nations. A student is at the front of the class presenting while others take notes. The style is professional educational photography with a clean, light-filled aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUXZulg-rDTtwJZ5KI_fqdj97fF1kCmZLsjjPmMvm5ZgW27Y4IuXk-PRT5h66Z_3Wd_QYcVIjaE0H98W2VFD6RaGOCJwj04rmRGK_gbfjhn_lalUubxVPEA6L17hF1-3Xw1ElrQbJLU1iPB59Rab0q6b1sHpHCuHX8yULF3HlUHG814wanhUjz5jmwzyZe2Zh1uz_xGkfYIDb6uJOnTNnFX40fq2HV87qhcgQVUSyvpDg8fuBBWw6M-7fPhCGTeDKftsxhKuhrH8g"/>
+<div class="absolute top-4 left-4 bg-secondary-fixed-dim text-on-secondary-fixed px-4 py-1 rounded-full font-label-md">Global</div>
+</div>
+<div class="p-8">
+<h4 class="font-headline-md text-primary mb-3">Bahasa Internasional</h4>
+<p class="font-body-md text-on-surface-variant mb-6">Kemampuan komunikasi aktif dalam Bahasa Arab dan Inggris sebagai bekal kompetisi global.</p>
+<div class="flex items-center gap-4 text-on-surface-variant text-sm border-t border-outline-variant pt-6">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">language</span> Bilingual</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">public</span> Native Speaker</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Events & Video Split Section -->
+<section class="py-stack-lg bg-surface">
+<div class="w-full px-margin-desktop max-w-container-max mx-auto">
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Agenda Mendatang (Left) -->
+<div class="flex-1">
+<h2 class="font-headline-lg text-primary mb-8">Agenda Mendatang</h2>
+<div class="space-y-6">
+<!-- Event 1 -->
+<div class="flex items-stretch bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+<div class="w-24 flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container py-4">
+<span class="font-display-lg text-display-lg leading-none">22</span>
+<span class="font-label-md uppercase">Okt</span>
+</div>
+<div class="flex-1 p-6">
+<div class="flex items-center gap-3 text-on-surface-variant text-sm mb-2">
+<span class="material-symbols-outlined text-sm">schedule</span> 08:00 - 12:00
+                                    <span class="material-symbols-outlined text-sm">location_on</span> Main Hall
+                                </div>
+<h4 class="font-headline-md text-primary">Open House &amp; Talkshow Pendidikan</h4>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="flex items-stretch bg-white border border-outline-variant rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+<div class="w-24 flex flex-col items-center justify-center bg-surface-container-highest text-on-surface py-4">
+<span class="font-display-lg text-display-lg leading-none">14</span>
+<span class="font-label-md uppercase">Des</span>
+</div>
+<div class="flex-1 p-6">
+<div class="flex items-center gap-3 text-on-surface-variant text-sm mb-2">
+<span class="material-symbols-outlined text-sm">schedule</span> 19:00 - Selesai
+                                    <span class="material-symbols-outlined text-sm">location_on</span> Masjid Al-Ikhlas
+                                </div>
+<h4 class="font-headline-md text-primary">Kajian Rutin &amp; Silaturahmi Wali Murid</h4>
+</div>
+</div>
+</div>
+</div>
+<!-- Lihat Sekolah Kami (Right) -->
+<div class="flex-1 lg:pl-12">
+<h2 class="font-headline-lg text-primary mb-8">Lihat Sekolah Kami</h2>
+<div class="relative rounded-2xl overflow-hidden aspect-video shadow-2xl group">
+<img class="w-full h-full object-cover" data-alt="A cinematic overhead drone shot of a modern school campus with large green playing fields, basketball courts, and contemporary buildings with Islamic architectural accents. Students are gathered in the central courtyard during a bright, sunny break time. The overall feeling is one of space, vitality, and high-quality educational infrastructure." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlW3sz7IsusXqnlIASNEUVdwI4sU5s27obh1fCC4PWFienJ5cVE_cpg0tzTHQ5PZLsd9y0bWt2Aj4hjF9pkFLfedo3UNWSllI3cAEkfthKkwupHQbO8ms4oqlI1teo1-97rV-lBYTrqntfyZEG8GGgKa7weH92-Zb-47PVuVRZhYojFVnj8Dtlt_NRWUsBXW6nQ5dqYk9g8EzU4bu626gTTo7BC-16ZfLIn7FQGWODamQjsUyNAdadkx85DXjnyxs30OP1IQIVdrU"/>
+<div class="absolute inset-0 bg-primary/20 flex items-center justify-center group-hover:bg-primary/40 transition-colors">
+<button class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center text-on-secondary-container shadow-2xl hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl fill-icon">play_arrow</span>
+</button>
+</div>
+<div class="absolute bottom-6 left-6 text-white">
+<h4 class="font-headline-md">Tur Video Kampus</h4>
+<p class="font-body-sm opacity-80">Jelajahi fasilitas modern dan lingkungan belajar kami.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- News Feed (Latest News) -->
+<section class="py-stack-lg bg-white">
+<div class="w-full px-margin-desktop max-w-container-max mx-auto">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<h2 class="font-headline-lg text-primary">Berita Terbaru</h2>
+<p class="font-body-md text-on-surface-variant mt-4">Kabar terkini dari kegiatan akademik, prestasi siswa, dan informasi sekolah.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- News 1 -->
+<div class="group">
+<div class="rounded-xl overflow-hidden mb-4 h-48 border border-outline-variant">
+<img alt="Science Lab News" class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/AP1WRLs8Nm8iwX7AzKguti6IJB912xnsylgOE4GcmeLkKVQBogj7HTpv3JlhxAEN6_vsmEKiLIbtvQYwiMd1PcgfLTDd0NION0YUb2TKLBLED5hU7WDG_GSqAynS4BqzqWJ6EEB5YFPxLh9ud89CnRO_XyZFKsK-TpgGJzdwniM2ivOaveo0J21x_3wYOdQhkqpZzS6qRjqpEvGFRW8rJdPTgoCbfkWnzYVlQdX4f3MN9327Ctm8tA7GlqmR3Q"/>
+</div>
+<div class="text-secondary font-label-md mb-2">Prestasi</div>
+<h5 class="font-headline-md text-primary mb-2 line-clamp-2">Siswa Academia SIS Raih Medali Emas di Olimpiade Sains Nasional</h5>
+<div class="text-on-surface-variant text-sm font-body-sm">12 Juni 2024</div>
+</div>
+<!-- News 2 -->
+<div class="group">
+<div class="rounded-xl overflow-hidden mb-4 h-48 border border-outline-variant">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="A festive graduation ceremony at an Islamic school. Students in blue academic gowns and modest uniforms are smiling and receiving diplomas on a decorated stage. The background features institutional branding and floral arrangements. The mood is celebratory, formal, and filled with pride. High-quality corporate event photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRUns3nBu99niFlM8udSyA4UhXWq4Uedb8TXXeDNzznf5NNXIaQOBoY9mx08At0aRnHWuzbEbp1NXkb3kb5MtY-D8Ead71LhwjqRm7bOJ9x6iPXxjdcRjQxvwopniUnytxCJCM6b1OsE1QNuwAM1Gx_-NdeVTl93aR9hML4mbDL8-fMK42F32ZTGi9H2ApedxTx0tliLxOzs4hwEUVDPy6-629bNaNrfQ2ki5AlcfKQrnPlPdN9MfJSEIezDnAz0G6xZCEXKVC2NI"/>
+</div>
+<div class="text-secondary font-label-md mb-2">Kegiatan</div>
+<h5 class="font-headline-md text-primary mb-2 line-clamp-2">Kemeriahan Wisuda Tahfidz Angkatan Ke-VIII Tahun 2024</h5>
+<div class="text-on-surface-variant text-sm font-body-sm">05 Juni 2024</div>
+</div>
+<!-- News 3 -->
+<div class="group">
+<div class="rounded-xl overflow-hidden mb-4 h-48 border border-outline-variant">
+<img alt="Robotics Competition" class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/AP1WRLvFXuyTfxvO8nrnf-GE8zynz71UpuiTJ6PtLytF4yXsnfMqOu89FGDWuGZrMd_BDZCTiXu8kaSSBXrKuJFZPVNxqVd9_MJ_VwffNK_ovdSawUGUmOLhJstAMzWdHabTvAwxN0GF7l_UWsrhy6I_TUwnsCcuGtcg8_P2Rxn8OGfCbWvv8PJAyS-HAY8Z2lLe3ZbytvvMuWUY3xFueleU54z1f4gtHmeumwO9KKy3jnOW7tEFMCc3bJkkeIU"/>
+</div>
+<div class="text-secondary font-label-md mb-2">Teknologi</div>
+<h5 class="font-headline-md text-primary mb-2 line-clamp-2">Tim Robotik Sekolah Melaju ke Tingkat Internasional</h5>
+<div class="text-on-surface-variant text-sm font-body-sm">28 Mei 2024</div>
+</div>
+<!-- News 4 -->
+<div class="group">
+<div class="rounded-xl overflow-hidden mb-4 h-48 border border-outline-variant">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="A brightly lit school library with rows of books and modern study carrels. A teacher is helping a student find a book, while other students are quietly reading at tables. The atmosphere is quiet, intellectual, and inviting. The design of the library is modern with clean lines and plenty of natural light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwdgi7RH-HSRDEhQ4xutLfUMSU_OlycVkKqTMWu96MXp9brCW26ZYv4NxV3Avl1ReIgu_BEN-BQ6xsWu_PdOtC0rjV3Gt4z_FK8rqboLk8qUHPtczMlC1EMRZfID6X_V_8e4pc6p3AJ8G_tyX11EHfUDKagjYvIaqlWnWv-aJnALtFF_I2DRebUxteJMxHrKaq8Ddd2IB87AyaDCehwW8KKQSNCrwlSLEA6aCTih6XcIOFhSWH9daz-GdjHxvmCKOpo_XJU3qOlpA"/>
+</div>
+<div class="text-secondary font-label-md mb-2">Fasilitas</div>
+<h5 class="font-headline-md text-primary mb-2 line-clamp-2">Peningkatan Fasilitas Perpustakaan Digital untuk Literasi Siswa</h5>
+<div class="text-on-surface-variant text-sm font-body-sm">15 Mei 2024</div>
+</div>
+</div>
+<div class="mt-12 text-center">
+<button class="px-8 py-3 border border-primary text-primary font-label-md rounded-full hover:bg-primary hover:text-white transition-all">Lihat Semua Berita</button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-primary pt-20 pb-10 text-white">
+<div class="w-full px-margin-desktop max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-stack-lg mb-16">
+<!-- Branding & About -->
+<div class="lg:col-span-1">
+<span class="font-headline-lg text-headline-lg font-bold text-white mb-6 block">Academia SIS</span>
+<p class="font-body-sm text-on-primary-container leading-relaxed mb-6">
+                        Sekolah Information System (SIS) terintegrasi yang berkomitmen untuk memberikan pendidikan terbaik berbasis nilai-nilai Islami dan kemajuan teknologi terkini.
+                    </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors" href="#">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+</a>
+<a class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors" href="#">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+</div>
+</div>
+<!-- Quick Links -->
+<div>
+<h4 class="font-headline-md mb-6">Tautan Cepat</h4>
+<ul class="space-y-4 font-body-md text-on-primary-container">
+<li><a class="hover:text-secondary-container transition-colors" href="#">Beranda</a></li>
+<li><a class="hover:text-secondary-container transition-colors" href="#">Tentang Kami</a></li>
+<li><a class="hover:text-secondary-container transition-colors" href="#">Program Pendidikan</a></li>
+<li><a class="hover:text-secondary-container transition-colors" href="#">Penerimaan Siswa</a></li>
+<li><a class="hover:text-secondary-container transition-colors" href="#">Berita &amp; Artikel</a></li>
+</ul>
+</div>
+<!-- Resources -->
+<div>
+<h4 class="font-headline-md mb-6">Sumber Daya</h4>
+<ul class="space-y-4 font-body-md text-on-primary-container">
+<li><a class="hover:text-secondary-container transition-colors" href="#">Portal Orang Tua</a></li>
+<li><a class="hover:text-secondary-container transition-colors" href="#">Portal Siswa</a></li>
+<li><a class="hover:text-secondary-container transition-colors" href="#">Sistem E-Learning</a></li>
+<li><a class="hover:text-secondary-container transition-colors" href="#">Kalender Akademik</a></li>
+<li><a class="hover:text-secondary-container transition-colors" href="#">Kebijakan Privasi</a></li>
+</ul>
+</div>
+<!-- Contact Info -->
+<div>
+<h4 class="font-headline-md mb-6">Kontak Kami</h4>
+<ul class="space-y-4 font-body-md text-on-primary-container">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary-container">location_on</span>
+                            Jl. Pendidikan No. 127, Jakarta Selatan, Indonesia
+                        </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-container">call</span>
+                            +62 21 3456 7890
+                        </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-container">mail</span>
+                            info@academiasis.sch.id
+                        </li>
+</ul>
+<div class="mt-8">
+<h5 class="font-label-md mb-3 uppercase tracking-wider">Langganan Newsletter</h5>
+<div class="flex">
+<input class="bg-white/10 border-white/20 rounded-l-lg px-4 py-2 w-full text-white placeholder-white/50 focus:ring-secondary-container focus:border-secondary-container" placeholder="Email Anda" type="email"/>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-r-lg font-bold">Daftar</button>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-on-primary-container font-body-sm">
+<p>© 2024 Academia SIS. Seluruh Hak Cipta Dilindungi.</p>
+<div class="flex gap-8 mt-4 md:mt-0">
+<a class="hover:text-white" href="#">Syarat &amp; Ketentuan</a>
+<a class="hover:text-white" href="#">Aksesibilitas</a>
+<a class="hover:text-white" href="#">Peta Situs</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Simple Scroll to Top Interaction -->
+<button class="fixed bottom-8 right-8 w-12 h-12 bg-secondary text-white rounded-full shadow-2xl opacity-0 translate-y-10 transition-all duration-300 flex items-center justify-center z-[100]" id="scrollToTop">
+<span class="material-symbols-outlined">expand_less</span>
+</button>
+<script>
+        const scrollBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollBtn.classList.remove('opacity-0', 'translate-y-10');
+                scrollBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                scrollBtn.classList.add('opacity-0', 'translate-y-10');
+                scrollBtn.classList.remove('opacity-100', 'translate-y-0');
+            }
+        });
+        scrollBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body></html>

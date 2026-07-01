@@ -1,93 +1,147 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { fetchAdminNews, deleteNews, approveNews } from '../../store/newsSlice';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { DataTable } from '../../components/DataTable';
+import { TableSkeleton } from '../../components/TableSkeleton';
 
 const NewsManager = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { adminNewsList: news, loading, initialized } = useSelector((state) => state.news);
+
+    useEffect(() => {
+        if (!initialized) {
+            dispatch(fetchAdminNews());
+        }
+    }, [dispatch, initialized]);
+
+    const handleDelete = (id) => {
+        if (!window.confirm('Yakin ingin menghapus berita ini?')) return;
+        dispatch(deleteNews(id));
+    };
+    
+    const handleApprove = (id) => {
+        if (!window.confirm('Setujui dan publikasi berita ini?')) return;
+        dispatch(approveNews(id));
+    };
+
+    const handleEdit = (item) => {
+        navigate(`/admin/news/edit/${item.id}`);
+    };
+
+    const handleAdd = () => {
+        navigate('/admin/news/create');
+    };
+
+    const handleExportCsv = async () => {
+        try {
+            const toastId = toast.loading('Memproses export CSV...');
+            const response = await axios.get('/news/export', {
+                responseType: 'blob'
+            });
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            
+            const contentDisposition = response.headers['content-disposition'];
+            let filename = `Data_Berita_${new Date().toISOString().split('T')[0]}.csv`;
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+                if (filenameMatch && filenameMatch.length === 2) {
+                    filename = filenameMatch[1];
+                }
+            }
+            
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            
+            toast.dismiss(toastId);
+            toast.success('Berhasil mendownload CSV Berita');
+        } catch (error) {
+            console.error('Export error:', error);
+            toast.dismiss();
+            toast.error('Gagal melakukan export CSV');
+        }
+    };
+
+    const columns = [
+        {
+            accessorKey: 'title',
+            header: 'Judul Berita',
+            cell: info => <span className="font-bold">{info.getValue()}</span>
+        },
+        {
+            accessorKey: 'category.name',
+            header: 'Kategori',
+            cell: info => info.getValue() || '-'
+        },
+        {
+            accessorKey: 'author.name',
+            header: 'Penulis',
+            cell: info => info.getValue() || 'Admin'
+        },
+        {
+            accessorKey: 'status',
+            header: 'Status',
+            cell: info => {
+                const status = info.getValue() || 'draft';
+                let colorClass = 'bg-surface-variant text-on-surface-variant';
+                if (status === 'published') colorClass = 'bg-[#047857]/10 text-[#047857]';
+                else if (status === 'pending_approval') colorClass = 'bg-secondary-container/50 text-secondary';
+                
+                return (
+                    <span className={`px-2 py-1 rounded text-[11px] font-bold uppercase ${colorClass}`}>
+                        {status}
+                    </span>
+                );
+            }
+        },
+        {
+            id: 'actions',
+            header: 'Aksi',
+            cell: ({ row }) => (
+                <div className="flex gap-2">
+                    {row.original.status !== 'published' && (
+                        <button onClick={() => handleApprove(row.original.id)} className="text-[#047857] hover:bg-[#047857]/10 p-1 rounded transition-colors" title="Approve">
+                            <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                        </button>
+                    )}
+                    <button onClick={() => handleEdit(row.original)} className="text-primary hover:bg-primary/10 p-1 rounded transition-colors" title="Edit">
+                        <span className="material-symbols-outlined text-[18px]">edit</span>
+                    </button>
+                    <button onClick={() => handleDelete(row.original.id)} className="text-error hover:bg-error/10 p-1 rounded transition-colors" title="Hapus">
+                        <span className="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                </div>
+            )
+        }
+    ];
+
     return (
-        <div>
-            <div className="flex justify-between items-center mb-8">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Manajemen Berita</h1>
-                </div>
+        <div className="relative w-full">
+            <div className="mb-6">
+                <h1 className="font-headline-lg text-headline-lg text-on-background">Manajemen Berita</h1>
+                <p className="font-body-md text-on-surface-variant mt-1">Kelola artikel, berita, dan pengumuman sekolah.</p>
             </div>
-
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                    <div className="relative w-64">
-                        <i className="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400"></i>
-                        <input type="text" placeholder="Cari berita..." className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                    </div>
-                    <div className="flex space-x-3">
-                        <button className="border border-gray-300 bg-white text-gray-700 px-4 py-2 rounded text-sm font-medium hover:bg-gray-50 flex items-center">
-                            <i className="fa-solid fa-filter mr-2"></i> Filter
-                        </button>
-                        <button className="bg-[#1e40af] text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-800 flex items-center">
-                            <i className="fa-solid fa-plus mr-2"></i> Tambah Berita
-                        </button>
-                    </div>
-                </div>
-
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-gray-600">
-                        <thead className="bg-gray-50 border-b border-gray-200 text-xs uppercase font-semibold text-gray-600">
-                            <tr>
-                                <th className="px-6 py-4">Judul Berita</th>
-                                <th className="px-6 py-4">Kategori</th>
-                                <th className="px-6 py-4">Penulis</th>
-                                <th className="px-6 py-4">Status</th>
-                                <th className="px-6 py-4 text-right">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100 bg-white">
-                            <tr className="hover:bg-gray-50">
-                                <td className="px-6 py-4">
-                                    <p className="font-bold text-gray-900">Pendaftaran Mahasiswa Baru Tahun 2024 Dibuka</p>
-                                    <p className="text-xs text-gray-500 mt-1">12 Okt 2023, 08:00 WIB</p>
-                                </td>
-                                <td className="px-6 py-4">Pengumuman</td>
-                                <td className="px-6 py-4 flex items-center mt-2">
-                                    <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs flex items-center justify-center font-bold mr-2">AB</div>
-                                    Admin Bagian
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">Published</span>
-                                </td>
-                                <td className="px-6 py-4 text-right space-x-3 text-gray-400">
-                                    <button className="hover:text-blue-600"><i className="fa-solid fa-pen-to-square"></i></button>
-                                    <button className="hover:text-red-600"><i className="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr className="hover:bg-gray-50">
-                                <td className="px-6 py-4">
-                                    <p className="font-bold text-gray-900">Jadwal Ujian Akhir Semester Ganjil 2023/2024</p>
-                                    <p className="text-xs text-gray-500 mt-1">15 Okt 2023, 14:30 WIB</p>
-                                </td>
-                                <td className="px-6 py-4">Akademik</td>
-                                <td className="px-6 py-4 flex items-center mt-2">
-                                    <div className="w-6 h-6 rounded-full bg-yellow-100 text-yellow-700 text-xs flex items-center justify-center font-bold mr-2">SA</div>
-                                    Staf Akademik
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded">Pending</span>
-                                </td>
-                                <td className="px-6 py-4 text-right space-x-3 text-gray-400">
-                                    <button className="hover:text-green-600" title="Approve"><i className="fa-solid fa-circle-check"></i></button>
-                                    <button className="hover:text-blue-600"><i className="fa-solid fa-pen-to-square"></i></button>
-                                    <button className="hover:text-red-600"><i className="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div className="p-4 border-t border-gray-200 flex justify-between items-center text-sm text-gray-600 bg-gray-50">
-                    <div>Menampilkan <span className="font-bold">1</span> sampai <span className="font-bold">2</span> dari <span className="font-bold">45</span> berita</div>
-                    <div className="flex space-x-1">
-                        <button className="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">Sebelumnya</button>
-                        <button className="px-3 py-1 border border-blue-600 bg-blue-600 text-white rounded">1</button>
-                        <button className="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">2</button>
-                        <button className="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">Selanjutnya</button>
-                    </div>
-                </div>
-            </div>
+            
+            {loading && !initialized ? (
+                <TableSkeleton />
+            ) : (
+                <DataTable 
+                    columns={columns} 
+                    data={news} 
+                    searchPlaceholder="Cari judul berita..."
+                    onAdd={handleAdd}
+                    addLabel="Tulis Berita Baru"
+                    onExport={handleExportCsv}
+                />
+            )}
         </div>
     );
 };

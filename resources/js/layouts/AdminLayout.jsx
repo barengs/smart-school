@@ -1,104 +1,138 @@
-import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/authSlice';
+import { ActivityMonitor } from '../components/ActivityMonitor';
+import { LockScreenOverlay } from '../components/LockScreenOverlay';
+import axios from 'axios';
 
 const AdminLayout = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isLocked, isAuthenticated } = useSelector(state => state.auth);
 
-    // In a real app, this comes from the API (Matrix Menu)
-    const menus = [
-        { name: 'Dashboard', path: '/admin', icon: 'fa-solid fa-border-all' },
-        { name: 'Students', path: '/admin/students', icon: 'fa-solid fa-users' },
-        { name: 'Faculty', path: '/admin/faculty', icon: 'fa-solid fa-chalkboard-user' },
-        { name: 'Courses', path: '/admin/courses', icon: 'fa-solid fa-book-open' },
-        { name: 'Manajemen Berita', path: '/admin/news', icon: 'fa-solid fa-newspaper' },
-        { name: 'Finance', path: '/admin/finance', icon: 'fa-solid fa-money-bill' },
-        { name: 'Role Matrix', path: '/admin/rbac', icon: 'fa-solid fa-shield-halved' },
-        { name: 'Reports', path: '/admin/reports', icon: 'fa-solid fa-chart-column' },
-    ];
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login');
+        }
+    }, [isAuthenticated, navigate]);
+
+    const [menus, setMenus] = React.useState([]);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(false);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            axios.get('/menus?type=admin').then(res => {
+                setMenus(res.data);
+            }).catch(err => {
+                console.error("Failed to load admin menus", err);
+            });
+        }
+    }, [isAuthenticated]);
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
 
     return (
-        <div className="flex h-screen bg-gray-50 font-inter overflow-hidden">
-            {/* Sidebar */}
-            <aside className="w-64 bg-[#0a192f] text-gray-300 flex flex-col justify-between flex-shrink-0 shadow-lg">
-                <div>
-                    <div className="h-20 flex items-center px-6 bg-[#081324] border-b border-gray-800">
-                        <div className="w-8 h-8 bg-blue-100 text-blue-900 rounded flex items-center justify-center mr-3 font-bold">
-                            <i className="fa-solid fa-graduation-cap"></i>
+        <>
+            <div className={`bg-background text-on-background font-body-md text-body-md antialiased flex h-screen overflow-hidden ${isLocked ? 'blur-sm pointer-events-none' : ''}`}>
+            {/* Monitor and LockScreen are mounted outside the blurred container */}
+            <ActivityMonitor />
+            {/* Shared Component: SideNavBar */}
+            <aside className={`fixed left-0 top-0 h-screen ${isSidebarCollapsed ? 'w-20' : 'w-sidebar-width'} bg-primary text-on-primary flex flex-col z-50 transition-all duration-300`}>
+                {/* Header */}
+                <div className={`flex items-center border-b border-white/10 h-16 shrink-0 ${isSidebarCollapsed ? 'justify-center p-0' : 'p-gutter justify-between'}`}>
+                    <div className={`flex items-center overflow-hidden ${isSidebarCollapsed ? 'justify-center' : 'gap-stack-md'}`}>
+                        <div className="w-12 h-12 flex items-center justify-center text-secondary-fixed font-bold shrink-0">
+                            <span className="material-symbols-outlined" style={{ fontSize: '40px' }}>school</span>
                         </div>
-                        <div>
-                            <h2 className="text-white font-bold text-lg leading-tight tracking-wide">Admin Portal</h2>
-                            <p className="text-xs text-gray-400">Central Management</p>
-                        </div>
+                        {!isSidebarCollapsed && (
+                            <div className="whitespace-nowrap transition-opacity duration-300">
+                                <h1 className="font-headline-md text-headline-md text-secondary-fixed">Admin Portal</h1>
+                                <p className="font-body-sm text-body-sm text-on-primary/70">Central Management</p>
+                            </div>
+                        )}
                     </div>
-                    
-                    <div className="px-4 py-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        Main Menu
-                    </div>
-
-                    <nav className="flex-1 px-3 space-y-1">
-                        {menus.map((item) => {
-                            const isActive = location.pathname === item.path || (item.path !== '/admin' && location.pathname.startsWith(item.path));
-                            return (
-                                <Link
-                                    key={item.name}
-                                    to={item.path}
-                                    className={`flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors ${
-                                        isActive 
-                                        ? 'bg-[#172a45] text-white border-l-4 border-blue-500' 
-                                        : 'hover:bg-[#112240] hover:text-white border-l-4 border-transparent'
-                                    }`}
-                                >
-                                    <i className={`${item.icon} w-6 text-center mr-3 ${isActive ? 'text-blue-400' : 'text-gray-400'}`}></i>
-                                    {item.name}
-                                </Link>
-                            );
-                        })}
-                    </nav>
                 </div>
-                
-                <div className="p-4">
-                    <div className="bg-[#112240] rounded-md p-3 mb-4">
-                        <div className="text-xs text-gray-400 text-center font-medium">Academic Year 2024</div>
-                    </div>
-                    <Link to="/admin/settings" className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-[#112240] transition-colors">
-                        <i className="fa-solid fa-gear w-6 text-center mr-3 text-gray-400"></i> Settings
-                    </Link>
-                    <Link to="/admin/support" className="flex items-center px-3 py-2 text-sm font-medium rounded-md hover:bg-[#112240] transition-colors">
-                        <i className="fa-solid fa-circle-question w-6 text-center mr-3 text-gray-400"></i> Support
+
+                {/* Navigation Links */}
+                <nav className="flex-1 overflow-y-auto py-stack-md flex flex-col gap-1">
+                    {menus.map((item) => {
+                        const isActive = location.pathname === item.url || (item.url !== '/admin' && location.pathname.startsWith(item.url));
+                        return (
+                            <Link
+                                key={item.id || item.label}
+                                to={item.url}
+                                className={`flex items-center ${isSidebarCollapsed ? 'justify-center px-0' : 'gap-stack-md px-stack-md'} py-stack-sm transition-all duration-200 ${
+                                    isActive
+                                        ? 'border-l-4 border-secondary-fixed bg-white/10 text-on-primary font-bold'
+                                        : 'border-l-4 border-transparent text-on-primary/70 hover:bg-white/5 hover:text-on-primary'
+                                }`}
+                                title={isSidebarCollapsed ? item.label : ''}
+                            >
+                                <span className={`material-symbols-outlined ${isActive ? 'icon-fill' : ''}`}>{item.icon || 'circle'}</span>
+                                {!isSidebarCollapsed && <span className="font-label-md text-label-md whitespace-nowrap">{item.label}</span>}
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                {/* Footer / CTA */}
+                <div className="p-stack-md border-t border-white/10 flex flex-col gap-2 shrink-0 overflow-hidden">
+                    {!isSidebarCollapsed && (
+                        <div className="px-stack-sm py-2 bg-primary-container text-on-primary-container rounded font-label-md text-label-md text-center mb-2 whitespace-nowrap">
+                            Academic Year 2024
+                        </div>
+                    )}
+
+                    <Link to="/admin/support" className={`flex items-center ${isSidebarCollapsed ? 'justify-center px-0' : 'gap-stack-md px-stack-md'} py-stack-sm text-on-primary/70 hover:bg-white/5 hover:text-on-primary transition-all duration-200`} title={isSidebarCollapsed ? 'Support' : ''}>
+                        <span className="material-symbols-outlined">contact_support</span>
+                        {!isSidebarCollapsed && <span className="font-label-md text-label-md whitespace-nowrap">Support</span>}
                     </Link>
                 </div>
             </aside>
 
-            {/* Main Content Area */}
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-                {/* Topbar */}
-                <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 flex-shrink-0 shadow-sm z-10">
-                    <div className="flex-1 flex items-center">
-                        <i className="fa-solid fa-magnifying-glass text-gray-400 mr-3"></i>
-                        <input type="text" placeholder="Cari data..." className="border-none focus:ring-0 outline-none w-full max-w-md text-sm" />
-                    </div>
-                    <div className="flex items-center space-x-6">
-                        <button className="text-gray-400 hover:text-gray-600 relative">
-                            <i className="fa-solid fa-bell text-lg"></i>
-                            <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+            {/* Main Content Canvas */}
+            <main className={`${isSidebarCollapsed ? 'ml-20' : 'ml-sidebar-width'} flex-1 flex flex-col h-screen overflow-hidden bg-surface transition-all duration-300`}>
+                {/* Admin Top Bar */}
+                <header className="h-16 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-gutter shrink-0">
+                    <div className="flex items-center gap-stack-md text-on-surface-variant">
+                        <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container shrink-0 flex items-center justify-center">
+                            <span className="material-symbols-outlined">menu</span>
                         </button>
-                        <div className="border-l border-gray-300 h-8"></div>
-                        <div className="flex items-center">
-                            <img className="h-8 w-8 rounded-full object-cover" src="https://ui-avatars.com/api/?name=Budi+Santoso&background=random" alt="User Avatar" />
-                            <div className="ml-3">
-                                <p className="text-sm font-semibold text-gray-700 leading-tight">Budi Santoso</p>
-                                <p className="text-xs text-gray-500">Super Admin</p>
+                        <span className="material-symbols-outlined">search</span>
+                        <input type="text" placeholder="Cari data..." className="bg-transparent border-none focus:ring-0 font-body-sm text-body-sm text-on-surface w-64 placeholder:text-on-surface-variant" />
+                    </div>
+                    <div className="flex items-center gap-gutter">
+                        <button className="text-on-surface-variant hover:text-primary transition-colors relative">
+                            <span className="material-symbols-outlined">notifications</span>
+                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+                        </button>
+                        <div className="flex items-center gap-stack-md border-l border-outline-variant pl-gutter">
+                            <div className="flex items-center gap-stack-sm">
+                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0FHxqKbpMXizZA4gQf8mB5cND6Xc01a_fYxyfJVLWs9AS31-caDi-Z95bpK8gXl1fmfm_BOsns8QzxRWBk8EjDnW-R70CqFzCltC7yUub1NHfadJ2nDhLqwOKI_oGJMeFVTqGoKMnu8J9fWabu9N9QhY0hdYLOPVKiIHT3CXLx7nAhjLVwF4w1adfw6KKya0KneUDJqFZCyzL7nosD_yC9TWH7tarW9a0ZI241AVp0QZZO0KNzW0yg2walOTkBXYc84OrI34xuos" alt="User Avatar" className="w-8 h-8 rounded-full object-cover border border-outline-variant" />
+                                <div className="flex flex-col">
+                                    <span className="font-label-md text-label-md text-on-surface">Super Admin</span>
+                                    <span className="font-body-sm text-body-sm text-on-surface-variant" style={{ fontSize: '11px', lineHeight: '14px' }}>Sistem Utama</span>
+                                </div>
                             </div>
+                            <button onClick={handleLogout} className="text-error hover:bg-error/10 p-2 rounded-full transition-colors ml-2" title="Keluar">
+                                <span className="material-symbols-outlined">logout</span>
+                            </button>
                         </div>
                     </div>
                 </header>
 
-                {/* Page Content */}
-                <main className="flex-1 overflow-y-auto p-8 bg-[#f8fafc]">
-                    <Outlet />
+                    {/* Scrollable Content Area */}
+                    <div className="flex-1 overflow-y-auto px-6 py-4">
+                        <Outlet />
+                    </div>
                 </main>
             </div>
-        </div>
+            {isLocked && <LockScreenOverlay />}
+        </>
     );
 };
 

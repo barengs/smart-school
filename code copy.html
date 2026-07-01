@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academia SIS - Admin Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#dce1ff",
+                      "tertiary-container": "#384055",
+                      "inverse-primary": "#b6c4ff",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-secondary-fixed": "#261a00",
+                      "tertiary-fixed": "#dae2fd",
+                      "on-secondary-fixed-variant": "#5c4300",
+                      "background": "#f7f9fb",
+                      "outline": "#757682",
+                      "inverse-surface": "#2d3133",
+                      "on-surface-variant": "#444651",
+                      "secondary-fixed": "#ffdf9f",
+                      "inverse-on-surface": "#eff1f3",
+                      "primary-fixed-dim": "#b6c4ff",
+                      "surface": "#f7f9fb",
+                      "surface-container-high": "#e6e8ea",
+                      "on-primary-fixed-variant": "#264191",
+                      "on-primary-container": "#90a8ff",
+                      "on-tertiary-container": "#a4acc5",
+                      "on-background": "#191c1e",
+                      "surface-dim": "#d8dadc",
+                      "primary": "#00236f",
+                      "secondary-fixed-dim": "#f9bd22",
+                      "surface-tint": "#4059aa",
+                      "tertiary": "#222a3e",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "surface-bright": "#f7f9fb",
+                      "surface-container-lowest": "#ffffff",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#e0e3e5",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#ffc329",
+                      "on-error-container": "#93000a",
+                      "on-secondary-container": "#6f5100",
+                      "surface-container": "#eceef0",
+                      "on-tertiary": "#ffffff",
+                      "on-surface": "#191c1e",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#00164e",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f2f4f6",
+                      "secondary": "#795900",
+                      "primary-container": "#1e3a8a",
+                      "outline-variant": "#c5c5d3",
+                      "on-tertiary-fixed": "#131b2e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-sm": "8px",
+                      "stack-lg": "32px",
+                      "stack-md": "16px",
+                      "sidebar-width": "280px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "container-max": "1280px",
+                      "margin-desktop": "32px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "code": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "code": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased flex h-screen overflow-hidden">
+<!-- Shared Component: SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width bg-primary text-on-primary flex flex-col z-50">
+<!-- Header -->
+<div class="p-gutter flex items-center gap-stack-md border-b border-white/10">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary font-bold">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-secondary-fixed">Admin Portal</h1>
+<p class="font-body-sm text-body-sm text-on-primary/70">Central Management</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto py-stack-md flex flex-col gap-1">
+<!-- Active Item: Dashboard -->
+<a class="flex items-center gap-stack-md px-stack-md py-stack-sm border-l-4 border-secondary-fixed bg-white/10 text-on-primary font-bold transition-all duration-200" href="#">
+<span class="material-symbols-outlined icon-fill">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-md py-stack-sm text-on-primary/70 hover:bg-white/5 hover:text-on-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-md py-stack-sm text-on-primary/70 hover:bg-white/5 hover:text-on-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">Faculty</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-md py-stack-sm text-on-primary/70 hover:bg-white/5 hover:text-on-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">Courses</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-md py-stack-sm text-on-primary/70 hover:bg-white/5 hover:text-on-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-md py-stack-sm text-on-primary/70 hover:bg-white/5 hover:text-on-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</nav>
+<!-- Footer / CTA -->
+<div class="p-stack-md border-t border-white/10 flex flex-col gap-2">
+<div class="px-stack-sm py-2 bg-primary-container text-on-primary-container rounded font-label-md text-label-md text-center mb-2">
+                Academic Year 2024
+            </div>
+<a class="flex items-center gap-stack-md px-stack-md py-stack-sm text-on-primary/70 hover:bg-white/5 hover:text-on-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-stack-md px-stack-md py-stack-sm text-on-primary/70 hover:bg-white/5 hover:text-on-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-sidebar-width flex-1 flex flex-col h-screen overflow-hidden bg-surface">
+<!-- Admin Top Bar -->
+<header class="h-16 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-gutter shrink-0">
+<div class="flex items-center gap-stack-md text-on-surface-variant">
+<span class="material-symbols-outlined">search</span>
+<input class="bg-transparent border-none focus:ring-0 font-body-sm text-body-sm text-on-surface w-64 placeholder:text-on-surface-variant" placeholder="Cari data..." type="text"/>
+</div>
+<div class="flex items-center gap-gutter">
+<button class="text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-stack-sm border-l border-outline-variant pl-gutter">
+<img class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A close up, professional corporate headshot of an Asian administrator in a bright, modern office setting with soft natural lighting and a neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0FHxqKbpMXizZA4gQf8mB5cND6Xc01a_fYxyfJVLWs9AS31-caDi-Z95bpK8gXl1fmfm_BOsns8QzxRWBk8EjDnW-R70CqFzCltC7yUub1NHfadJ2nDhLqwOKI_oGJMeFVTqGoKMnu8J9fWabu9N9QhY0hdYLOPVKiIHT3CXLx7nAhjLVwF4w1adfw6KKya0KneUDJqFZCyzL7nosD_yC9TWH7tarW9a0ZI241AVp0QZZO0KNzW0yg2walOTkBXYc84OrI34xuos"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Super Admin</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant" style="font-size: 11px; line-height: 14px;">Sistem Utama</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-margin-desktop">
+<div class="flex items-center justify-between mb-stack-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Ikhtisar Sistem</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Pantau pendaftaran PPDB, berita, dan aktivitas pengguna.</p>
+</div>
+<button class="px-4 py-2 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary/90 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                    Unduh Laporan
+                </button>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-stack-md mb-stack-lg">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex items-start gap-stack-md">
+<div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined icon-fill">how_to_reg</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Total Pendaftar (PPDB)</p>
+<h3 class="font-headline-md text-headline-md text-on-background mt-1">1,248</h3>
+<div class="flex items-center gap-1 text-[12px] font-medium text-[#047857] mt-1 bg-[#047857]/10 px-2 py-0.5 rounded w-fit">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                            +12% bulan ini
+                        </div>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex items-start gap-stack-md">
+<div class="w-12 h-12 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined icon-fill">campaign</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Berita Dipublikasi</p>
+<h3 class="font-headline-md text-headline-md text-on-background mt-1">84</h3>
+<div class="flex items-center gap-1 text-[12px] font-medium text-on-surface-variant mt-1">
+                            5 draft menunggu
+                        </div>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex items-start gap-stack-md">
+<div class="w-12 h-12 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined icon-fill">group</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Total Pengguna</p>
+<h3 class="font-headline-md text-headline-md text-on-background mt-1">3,492</h3>
+<div class="flex items-center gap-1 text-[12px] font-medium text-[#047857] mt-1 bg-[#047857]/10 px-2 py-0.5 rounded w-fit">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                            +2% bulan ini
+                        </div>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md flex items-start gap-stack-md">
+<div class="w-12 h-12 rounded-lg bg-error-container flex items-center justify-center text-on-error-container shrink-0">
+<span class="material-symbols-outlined icon-fill">admin_panel_settings</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Peran Aktif</p>
+<h3 class="font-headline-md text-headline-md text-on-background mt-1">12</h3>
+<div class="flex items-center gap-1 text-[12px] font-medium text-on-surface-variant mt-1">
+                            Sistem normal
+                        </div>
+</div>
+</div>
+</div>
+<!-- Complex Grid: Analytics & Recent Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- Analytics Chart Placeholder (Col Span 2) -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col">
+<div class="flex items-center justify-between mb-stack-md">
+<h3 class="font-label-md text-label-md text-on-background">Statistik Pendaftaran PPDB</h3>
+<select class="bg-surface-container border border-outline-variant rounded px-2 py-1 font-body-sm text-body-sm text-on-surface">
+<option>Tahun 2024</option>
+<option>Tahun 2023</option>
+</select>
+</div>
+<!-- Decorative Chart Area -->
+<div class="flex-1 w-full bg-surface-container-low rounded-lg relative overflow-hidden min-h-[300px] flex items-end p-4 gap-2">
+<!-- Simulated Bar Chart -->
+<div class="flex-1 bg-primary/20 hover:bg-primary/30 transition-colors rounded-t-sm h-[40%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Jan: 120</div>
+</div>
+<div class="flex-1 bg-primary/40 hover:bg-primary/50 transition-colors rounded-t-sm h-[60%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Feb: 180</div>
+</div>
+<div class="flex-1 bg-primary/60 hover:bg-primary/70 transition-colors rounded-t-sm h-[85%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Mar: 250</div>
+</div>
+<div class="flex-1 bg-secondary hover:bg-secondary/90 transition-colors rounded-t-sm h-[100%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Apr: 310</div>
+</div>
+<div class="flex-1 bg-primary/30 hover:bg-primary/40 transition-colors rounded-t-sm h-[50%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Mei: 150</div>
+</div>
+</div>
+<div class="flex justify-between mt-2 px-2 font-body-sm text-[12px] text-on-surface-variant">
+<span>Jan</span>
+<span>Feb</span>
+<span>Mar</span>
+<span>Apr</span>
+<span>Mei</span>
+</div>
+</div>
+<!-- Recent Activity List (Col Span 1) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col">
+<div class="p-stack-md border-b border-outline-variant flex items-center justify-between">
+<h3 class="font-label-md text-label-md text-on-background">Aktivitas Terbaru</h3>
+<button class="text-primary hover:underline font-body-sm text-[12px]">Lihat Semua</button>
+</div>
+<div class="flex flex-col flex-1 overflow-y-auto">
+<!-- Activity Item 1 -->
+<div class="p-stack-md border-b border-outline-variant/50 hover:bg-surface-container-low transition-colors flex gap-stack-md items-start">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">person_add</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-background"><span class="font-semibold">Budi Santoso</span> mendaftar via PPDB Online.</p>
+<p class="font-body-sm text-[12px] text-on-surface-variant mt-1">10 menit yang lalu</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="p-stack-md border-b border-outline-variant/50 hover:bg-surface-container-low transition-colors flex gap-stack-md items-start">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">edit_document</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-background">Draft berita <span class="font-semibold">"Jadwal Ujian Nasional"</span> menunggu persetujuan.</p>
+<p class="font-body-sm text-[12px] text-on-surface-variant mt-1">1 jam yang lalu</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="p-stack-md border-b border-outline-variant/50 hover:bg-surface-container-low transition-colors flex gap-stack-md items-start">
+<div class="w-8 h-8 rounded-full bg-error-container flex items-center justify-center text-on-error-container shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">manage_accounts</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-background">Peran <span class="font-semibold">Editor</span> diperbarui oleh Admin.</p>
+<p class="font-body-sm text-[12px] text-on-surface-variant mt-1">Kemarin, 14:30</p>
+</div>
+</div>
+<!-- Activity Item 4 -->
+<div class="p-stack-md hover:bg-surface-container-low transition-colors flex gap-stack-md items-start">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm text-on-background">Sistem backup otomatis berhasil diselesaikan.</p>
+<p class="font-body-sm text-[12px] text-on-surface-variant mt-1">Kemarin, 02:00</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

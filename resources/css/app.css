@@ -2,6 +2,9 @@
 @config "../../tailwind.config.js";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply font-['Inter',sans-serif];
   }
@@ -27,4 +30,26 @@
 .hover-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+@layer components {
+  input, select, textarea {
+    border-color: rgba(156, 163, 175, 0.3) !important;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: rgba(156, 163, 175, 1) !important;
+  }
+}
+
+/* Custom Academic Theme Overrides */
+.academic-gradient {
+    background: linear-gradient(135deg, rgba(0, 35, 111, 0.9) 0%, rgba(30, 58, 138, 0.7) 100%);
+}
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+}
+@media (max-width: 768px) {
+    .bento-grid { grid-template-columns: 1fr; }
 }

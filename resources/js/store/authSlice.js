@@ -42,10 +42,37 @@ export const logout = createAsyncThunk(
     }
 );
 
+export const unlockScreen = createAsyncThunk(
+    'auth/unlockScreen',
+    async (password, { rejectWithValue }) => {
+        try {
+            await axios.post('/auth/unlock', { password });
+            return true;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.error || 'Password salah');
+        }
+    }
+);
+
+export const refreshToken = createAsyncThunk(
+    'auth/refreshToken',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.post('/auth/refresh');
+            localStorage.setItem('token', response.data.access_token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
+            return response.data;
+        } catch (error) {
+            return rejectWithValue('Refresh failed');
+        }
+    }
+);
+
 const initialState = {
     user: null,
     token: localStorage.getItem('token') || null,
     isAuthenticated: !!localStorage.getItem('token'),
+    isLocked: false,
     loading: false,
     error: null,
 };
@@ -56,13 +83,17 @@ const authSlice = createSlice({
     reducers: {
         clearError: (state) => {
             state.error = null;
-        }
+        },
+        lockScreen: (state) => {
+            state.isLocked = true;
+        },
     },
     extraReducers: (builder) => {
         builder
             .addCase(login.pending, (state) => {
                 state.loading = true;
                 state.error = null;
+                state.isLocked = false;
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
@@ -80,9 +111,34 @@ const authSlice = createSlice({
                 state.user = null;
                 state.token = null;
                 state.isAuthenticated = false;
+                state.isLocked = false;
+            })
+            .addCase(unlockScreen.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(unlockScreen.fulfilled, (state) => {
+                state.loading = false;
+                state.isLocked = false;
+            })
+            .addCase(unlockScreen.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(refreshToken.fulfilled, (state, action) => {
+                state.token = action.payload.access_token;
+            })
+            .addCase(refreshToken.rejected, (state) => {
+                // If refresh fails (e.g. token expired beyond refresh TTL), force logout
+                state.user = null;
+                state.token = null;
+                state.isAuthenticated = false;
+                state.isLocked = false;
+                localStorage.removeItem('token');
+                delete axios.defaults.headers.common['Authorization'];
             });
     },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, lockScreen } = authSlice.actions;
 export default authSlice.reducer;

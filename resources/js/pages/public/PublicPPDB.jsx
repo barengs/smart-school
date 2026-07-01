@@ -1,24 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitPPDB, resetPPDBState } from '../../store/ppdbSlice';
+import { Input } from '../../components/ui/Input';
+import { Select } from '../../components/ui/Select';
+import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
 
 const PublicPPDB = () => {
     const [step, setStep] = useState(1);
     const dispatch = useDispatch();
-    const { registrationResult, loading, error, success } = useSelector((state) => state.ppdb);
+    const { registrationResult, loading: submitLoading, error, success } = useSelector((state) => state.ppdb);
+    const [info, setInfo] = useState(null);
+    const [infoLoading, setInfoLoading] = useState(true);
 
     const [formData, setFormData] = useState({
+        nik: '',
         full_name: '',
         nisn: '',
+        gender: 'L',
         place_of_birth: '',
         date_of_birth: '',
+        previous_school: '',
+        phone_number: '',
         address: '',
+        parent_nik: '',
         father_name: '',
         father_occupation: '',
         mother_name: '',
         mother_occupation: '',
-        phone_number: '',
+        parent_phone_number: '',
+        photo: null,
     });
 
     useEffect(() => {
@@ -28,13 +41,43 @@ const PublicPPDB = () => {
     }, [dispatch]);
 
     useEffect(() => {
+        axios.get('/public/ppdb/info')
+            .then(res => setInfo(res.data))
+            .catch(err => console.error(err))
+            .finally(() => setInfoLoading(false));
+    }, []);
+
+    // NIK Decode Effect
+    useEffect(() => {
+        if (formData.nik && formData.nik.length === 16) {
+            axios.get(`/public/decode-nik/${formData.nik}`)
+                .then(res => {
+                    const data = res.data;
+                    setFormData(prev => ({
+                        ...prev,
+                        place_of_birth: data.place_of_birth || prev.place_of_birth,
+                        date_of_birth: data.date_of_birth || prev.date_of_birth,
+                        gender: data.gender || prev.gender,
+                    }));
+                })
+                .catch(err => {
+                    console.error("Failed to decode NIK", err);
+                });
+        }
+    }, [formData.nik]);
+
+    useEffect(() => {
         if (success && step !== 3) {
             setStep(3);
         }
     }, [success, step]);
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (e.target.type === 'file') {
+            setFormData({ ...formData, [e.target.name]: e.target.files[0] });
+        } else {
+            setFormData({ ...formData, [e.target.name]: e.target.value });
+        }
     };
 
     const handleSubmit = () => {
@@ -46,10 +89,22 @@ const PublicPPDB = () => {
             <div className="max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop w-full">
                 <div className="text-center mb-stack-lg">
                     <h1 className="font-display-lg text-display-lg text-on-surface mb-2">Pendaftaran Peserta Didik Baru</h1>
-                    <p className="font-body-lg text-body-lg text-on-surface-variant">Tahun Ajaran 2024/2025</p>
+                    <p className="font-body-lg text-body-lg text-on-surface-variant">Tahun Ajaran {info?.name ? info.name : 'Terbaru'}</p>
                 </div>
 
-                <div className="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+                {infoLoading ? (
+                    <div className="text-center py-10">Memuat data...</div>
+                ) : (!info?.batches || info.batches.length === 0) ? (
+                    <Card className="p-stack-lg text-center">
+                        <div className="w-16 h-16 bg-surface-container-highest text-on-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span className="material-symbols-outlined text-[32px]">block</span>
+                        </div>
+                        <h3 className="font-headline-lg text-headline-lg text-on-surface mb-2">Pendaftaran Ditutup</h3>
+                        <p className="font-body-md text-body-md text-on-surface-variant">Mohon maaf, saat ini belum ada gelombang pendaftaran yang dibuka atau masa pendaftaran telah berakhir.</p>
+                        <Link to="/" className="mt-4 inline-block font-label-md text-primary hover:underline">Kembali ke Beranda</Link>
+                    </Card>
+                ) : (
+                <Card className="overflow-hidden">
                     <div className="flex border-b border-outline-variant">
                         <div className={`flex-1 text-center py-4 font-label-md text-label-md ${step === 1 ? 'border-b-2 border-primary text-primary' : 'text-on-surface-variant'}`}>
                             1. Data Pribadi
@@ -73,21 +128,21 @@ const PublicPPDB = () => {
                             <div className="flex flex-col gap-stack-md">
                                 <h3 className="font-headline-md text-headline-md text-on-surface border-b border-outline-variant pb-2">Informasi Calon Siswa</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
-                                    <div className="flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">Nama Lengkap</label>
-                                        <input name="full_name" value={formData.full_name} onChange={handleChange} type="text" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" placeholder="Sesuai Akta Kelahiran" />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">NISN</label>
-                                        <input name="nisn" value={formData.nisn} onChange={handleChange} type="text" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" placeholder="Nomor Induk Siswa Nasional" />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">Tempat Lahir</label>
-                                        <input name="place_of_birth" value={formData.place_of_birth} onChange={handleChange} type="text" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">Tanggal Lahir</label>
-                                        <input name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} type="date" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" />
+                                    <Input required name="nik" value={formData.nik} onChange={handleChange} label="NIK (Siswa)" />
+                                    <Input required name="full_name" value={formData.full_name} onChange={handleChange} label="Nama Lengkap" placeholder="Sesuai Akta Kelahiran" />
+                                    <Input name="nisn" value={formData.nisn} onChange={handleChange} label="NISN" placeholder="Nomor Induk Siswa Nasional" />
+                                    <Select name="gender" value={formData.gender} onChange={handleChange} label="Jenis Kelamin" options={[
+                                        { value: 'L', label: 'Laki-Laki' },
+                                        { value: 'P', label: 'Perempuan' }
+                                    ]} />
+                                    <Input name="place_of_birth" value={formData.place_of_birth} onChange={handleChange} label="Tempat Lahir" />
+                                    <Input name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} type="date" label="Tanggal Lahir" />
+                                    <Input name="previous_school" value={formData.previous_school} onChange={handleChange} label="Asal Sekolah" />
+                                    <Input name="phone_number" value={formData.phone_number} onChange={handleChange} label="Nomor Telepon (Siswa)" />
+                                    <div className="flex flex-col gap-1 md:col-span-2">
+                                        <label className="font-label-md text-label-md text-on-surface">Foto Calon Siswa</label>
+                                        <p className="text-xs text-on-surface-variant mb-1">Format: JPG/PNG (Max 2MB)</p>
+                                        <input type="file" name="photo" accept="image/jpeg,image/png" onChange={handleChange} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary-container file:text-on-primary-container hover:file:bg-primary/20 text-on-surface" />
                                     </div>
                                     <div className="md:col-span-2 flex flex-col gap-1">
                                         <label className="font-label-md text-label-md text-on-surface">Alamat Lengkap</label>
@@ -95,9 +150,9 @@ const PublicPPDB = () => {
                                     </div>
                                 </div>
                                 <div className="flex justify-end pt-4">
-                                    <button onClick={() => setStep(2)} className="flex items-center gap-2 bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded hover:bg-primary-container transition-colors shadow-sm">
+                                    <Button onClick={() => setStep(2)}>
                                         Selanjutnya <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -106,34 +161,24 @@ const PublicPPDB = () => {
                             <div className="flex flex-col gap-stack-md">
                                 <h3 className="font-headline-md text-headline-md text-on-surface border-b border-outline-variant pb-2">Informasi Orang Tua / Wali</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
-                                    <div className="flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">Nama Ayah</label>
-                                        <input name="father_name" value={formData.father_name} onChange={handleChange} type="text" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" />
+                                    <div className="md:col-span-2">
+                                        <Input required name="parent_nik" value={formData.parent_nik} onChange={handleChange} label="NIK Orang Tua / Wali" />
                                     </div>
-                                    <div className="flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">Pekerjaan Ayah</label>
-                                        <input name="father_occupation" value={formData.father_occupation} onChange={handleChange} type="text" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">Nama Ibu</label>
-                                        <input name="mother_name" value={formData.mother_name} onChange={handleChange} type="text" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" />
-                                    </div>
-                                    <div className="flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">Pekerjaan Ibu</label>
-                                        <input name="mother_occupation" value={formData.mother_occupation} onChange={handleChange} type="text" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" />
-                                    </div>
-                                    <div className="md:col-span-2 flex flex-col gap-1">
-                                        <label className="font-label-md text-label-md text-on-surface">Nomor Telepon / WhatsApp Aktif</label>
-                                        <input name="phone_number" value={formData.phone_number} onChange={handleChange} type="text" className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" />
+                                    <Input name="father_name" value={formData.father_name} onChange={handleChange} label="Nama Ayah" />
+                                    <Input name="father_occupation" value={formData.father_occupation} onChange={handleChange} label="Pekerjaan Ayah" />
+                                    <Input name="mother_name" value={formData.mother_name} onChange={handleChange} label="Nama Ibu" />
+                                    <Input name="mother_occupation" value={formData.mother_occupation} onChange={handleChange} label="Pekerjaan Ibu" />
+                                    <div className="md:col-span-2">
+                                        <Input required name="parent_phone_number" value={formData.parent_phone_number} onChange={handleChange} label="Nomor Telepon / WhatsApp (Orang Tua)" />
                                     </div>
                                 </div>
                                 <div className="flex justify-between pt-4">
-                                    <button onClick={() => setStep(1)} disabled={loading} className="flex items-center gap-2 border border-outline text-on-surface font-label-md text-label-md px-6 py-2 rounded hover:bg-surface-container transition-colors disabled:opacity-50">
+                                    <Button onClick={() => setStep(1)} disabled={submitLoading} variant="outline" className="gap-2">
                                         <span className="material-symbols-outlined text-[18px]">arrow_back</span> Kembali
-                                    </button>
-                                    <button onClick={handleSubmit} disabled={loading} className="flex items-center gap-2 bg-secondary text-on-secondary font-label-md text-label-md px-6 py-2 rounded hover:bg-secondary-fixed-dim transition-colors shadow-sm disabled:opacity-50">
-                                        {loading ? 'Memproses...' : 'Kirim Pendaftaran'} <span className="material-symbols-outlined text-[18px]">check</span>
-                                    </button>
+                                    </Button>
+                                    <Button onClick={handleSubmit} disabled={submitLoading} variant="secondary" className="gap-2">
+                                        {submitLoading ? 'Memproses...' : 'Kirim Pendaftaran'} <span className="material-symbols-outlined text-[18px]">check</span>
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -148,17 +193,18 @@ const PublicPPDB = () => {
                                     Terima kasih telah mendaftar di Academia SIS. Nomor registrasi Anda adalah <span className="font-bold text-primary">{registrationResult.registration_number}</span>. Silakan simpan nomor ini untuk keperluan verifikasi.
                                 </p>
                                 <div className="flex gap-4 justify-center">
-                                    <button className="flex items-center gap-2 bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded hover:bg-primary-container transition-colors shadow-sm">
+                                    <Button className="gap-2">
                                         <span className="material-symbols-outlined text-[18px]">download</span> Unduh Bukti
-                                    </button>
-                                    <Link to="/" className="border border-outline text-on-surface font-label-md text-label-md px-6 py-2 rounded hover:bg-surface-container transition-colors">
+                                    </Button>
+                                    <Button to="/" variant="outline">
                                         Kembali ke Beranda
-                                    </Link>
+                                    </Button>
                                 </div>
                             </div>
                         )}
                     </div>
-                </div>
+                </Card>
+                )}
             </div>
         </div>
     );

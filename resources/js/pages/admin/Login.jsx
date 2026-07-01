@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError } from '../../store/authSlice';
+import { Input } from '../../components/ui/Input';
+import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -37,7 +40,7 @@ const Login = () => {
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-surface-container-lowest py-8 px-4 shadow-sm border border-outline-variant sm:rounded-xl sm:px-10">
+                <Card className="py-8 px-4 sm:px-10">
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         {error && (
                             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm text-center">
@@ -45,37 +48,27 @@ const Login = () => {
                             </div>
                         )}
 
-                        <div className="flex flex-col gap-1">
-                            <label htmlFor="email" className="font-label-md text-label-md text-on-surface">
-                                Alamat Email
-                            </label>
-                            <input 
-                                id="email" 
-                                name="email" 
-                                type="email" 
-                                autoComplete="email" 
-                                required 
-                                value={credentials.email}
-                                onChange={handleChange}
-                                className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" 
-                            />
-                        </div>
+                        <Input 
+                            id="email" 
+                            name="email" 
+                            type="email" 
+                            label="Alamat Email"
+                            autoComplete="email" 
+                            required 
+                            value={credentials.email}
+                            onChange={handleChange}
+                        />
 
-                        <div className="flex flex-col gap-1">
-                            <label htmlFor="password" className="font-label-md text-label-md text-on-surface">
-                                Kata Sandi
-                            </label>
-                            <input 
-                                id="password" 
-                                name="password" 
-                                type="password" 
-                                autoComplete="current-password" 
-                                required 
-                                value={credentials.password}
-                                onChange={handleChange}
-                                className="w-full border border-outline bg-surface rounded px-4 py-2 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" 
-                            />
-                        </div>
+                        <Input 
+                            id="password" 
+                            name="password" 
+                            type="password" 
+                            label="Kata Sandi"
+                            autoComplete="current-password" 
+                            required 
+                            value={credentials.password}
+                            onChange={handleChange}
+                        />
 
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
@@ -98,13 +91,13 @@ const Login = () => {
                         </div>
 
                         <div>
-                            <button 
+                            <Button 
                                 type="submit" 
                                 disabled={loading}
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded shadow-sm font-label-md text-label-md text-on-primary bg-primary hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors disabled:opacity-70"
+                                className="w-full"
                             >
                                 {loading ? 'Memproses...' : 'Masuk'}
-                            </button>
+                            </Button>
                         </div>
                     </form>
                     
@@ -114,7 +107,7 @@ const Login = () => {
                             Kembali ke Beranda Publik
                         </Link>
                     </div>
-                </div>
+                </Card>
             </div>
         </div>
     );

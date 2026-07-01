@@ -12,24 +12,28 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        Permission::truncate();
+        Role::truncate();
+        \Illuminate\Support\Facades\DB::table('role_has_permissions')->truncate();
+        \Illuminate\Support\Facades\DB::table('model_has_roles')->truncate();
+        \Illuminate\Support\Facades\DB::table('model_has_permissions')->truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
 
-        // Ambil ID menu
-        $menus = Menu::all()->keyBy('name');
+        // Ambil ID menu (admin only)
+        $menus = Menu::where('type', 'admin')->get()->keyBy('label');
 
         // Buat permissions
-        $actions = ['read', 'create', 'update', 'delete'];
+        $actions = ['view', 'create', 'update', 'delete', 'approve'];
         
-        foreach ($menus as $name => $menu) {
+        foreach ($menus as $label => $menu) {
             foreach ($actions as $action) {
-                Permission::firstOrCreate(['name' => $menu->route_path . '.' . $action, 'menu_id' => $menu->id]);
+                // Ignore approve unless it's news or ppdb
+                if ($action === 'approve' && !in_array($label, ['Manajemen Berita', 'Manajemen PPDB'])) {
+                    continue;
+                }
+                Permission::firstOrCreate(['name' => $menu->url . '.' . $action, 'menu_id' => $menu->id]);
             }
-        }
-        // Khusus approve berita & ppdb
-        if (isset($menus['Manajemen Berita'])) {
-            Permission::firstOrCreate(['name' => '/admin/news.approve', 'menu_id' => $menus['Manajemen Berita']->id]);
-        }
-        if (isset($menus['Data PPDB'])) {
-            Permission::firstOrCreate(['name' => '/admin/ppdb.approve', 'menu_id' => $menus['Data PPDB']->id]);
         }
 
         // Roles
@@ -38,12 +42,20 @@ class RolePermissionSeeder extends Seeder
 
         $editor = Role::firstOrCreate(['name' => 'Editor Berita']);
         if (isset($menus['Manajemen Berita'])) {
-            $editor->givePermissionTo(['/admin/news.read', '/admin/news.create', '/admin/news.update']);
+            $editor->givePermissionTo([
+                '/admin/news.view', 
+                '/admin/news.create', 
+                '/admin/news.update'
+            ]);
         }
 
         $reviewer = Role::firstOrCreate(['name' => 'Reviewer PPDB']);
-        if (isset($menus['Data PPDB'])) {
-            $reviewer->givePermissionTo(['/admin/ppdb.read', '/admin/ppdb.update', '/admin/ppdb.approve']);
+        if (isset($menus['Manajemen PPDB'])) {
+            $reviewer->givePermissionTo([
+                '/admin/ppdb.view', 
+                '/admin/ppdb.update', 
+                '/admin/ppdb.approve'
+            ]);
         }
     }
 }

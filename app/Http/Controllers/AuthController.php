@@ -90,6 +90,19 @@ class AuthController extends Controller
     }
 
     /**
+     * Unlock screen by verifying password.
+     */
+    public function unlock(Request $request)
+    {
+        $request->validate(['password' => 'required']);
+        $user = Auth::guard('api')->user();
+        if (\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Unlocked']);
+        }
+        return response()->json(['error' => 'Kata sandi tidak sesuai'], 401);
+    }
+
+    /**
      * Get the token array structure.
      *
      * @param  string $token

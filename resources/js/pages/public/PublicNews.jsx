@@ -2,14 +2,17 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNews } from '../../store/newsSlice';
+import { NewsCardSkeleton } from '../../components/NewsCardSkeleton';
 
 const PublicNews = () => {
     const dispatch = useDispatch();
-    const { newsList, loading, error } = useSelector((state) => state.news);
+    const { newsList, loading, error, initializedPublic } = useSelector((state) => state.news);
 
     useEffect(() => {
-        dispatch(fetchNews());
-    }, [dispatch]);
+        if (!initializedPublic) {
+            dispatch(fetchNews());
+        }
+    }, [dispatch, initializedPublic]);
 
     return (
         <div className="bg-surface min-h-[calc(100vh-80px)] py-stack-lg font-body-md">
@@ -19,7 +22,7 @@ const PublicNews = () => {
                     <div>
                         <h1 className="font-display-lg text-[40px] text-on-surface mb-2">Portal Berita</h1>
                         <p className="font-body-lg text-body-lg text-on-surface-variant">
-                            Informasi, kegiatan, dan prestasi terbaru dari Academia SIS.
+                            Informasi, kegiatan, dan prestasi terbaru.
                         </p>
                     </div>
                     <div className="flex border border-outline-variant bg-surface-container-lowest rounded-md overflow-hidden">
@@ -31,7 +34,9 @@ const PublicNews = () => {
                 </div>
 
                 {loading ? (
-                    <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div></div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter mb-stack-lg">
+                        {[...Array(6)].map((_, i) => <NewsCardSkeleton key={i} />)}
+                    </div>
                 ) : error ? (
                     <div className="text-center py-20 text-red-500">{error}</div>
                 ) : (

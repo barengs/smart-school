@@ -2,23 +2,35 @@
 
 namespace Database\Seeders;
 
-use App\Models\SchoolProfile;
 use Illuminate\Database\Seeder;
+use App\Models\SchoolProfile;
 
 class SchoolProfileSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        SchoolProfile::create([
-            'school_name' => 'SMA SmartSchool Nusantara',
-            'npsn' => '10293847',
-            'headmaster_name' => 'Dr. Budi Santoso, M.Pd.',
-            'address' => 'Jl. Pendidikan No. 123, Kota Cerdas, Provinsi Maju',
-            'phone_number' => '(021) 555-1234',
-            'email' => 'info@smartschool.sch.id',
-            'vision' => 'Menjadi institusi pendidikan terbaik yang menghasilkan generasi cerdas, berkarakter, dan inovatif.',
-            'mission' => '1. Menyelenggarakan pendidikan berkualitas.\n2. Mengembangkan potensi siswa secara maksimal.\n3. Membangun karakter bangsa yang bermoral dan beretika.',
-            'history' => 'SMA SmartSchool Nusantara didirikan pada tahun 1990 dengan tujuan untuk memberikan pendidikan berkualitas tinggi bagi masyarakat sekitar.',
-        ]);
+        SchoolProfile::updateOrCreate(
+            ['id' => 1],
+            [
+                'school_name' => 'MAS MIFTAHUL QULUB',
+                'npsn' => '20580001',
+                'nsm' => '131235090001',
+                'accreditation' => 'A',
+                'status' => 'Swasta',
+                'address' => 'Jl. Pendidikan No. 1, Desa Miftahul Qulub, Kec. Pamekasan',
+                'phone_number' => '(0324) 123456',
+                'email' => 'info@masmiftahulqulub.sch.id',
+                'website' => 'https://masmiftahulqulub.sch.id',
+                'vision' => 'Terwujudnya Generasi Qur\'ani yang Cerdas, Terampil, dan Berakhlakul Karimah',
+                'mission' => '<ul><li>Menyelenggarakan pendidikan berbasis nilai-nilai Islam.</li><li>Meningkatkan kualitas akademik dan non-akademik siswa.</li><li>Membina kepribadian siswa yang berakhlak mulia.</li></ul>',
+                'history' => '<p>MAS MIFTAHUL QULUB didirikan pada tahun 1990 atas inisiatif tokoh masyarakat setempat untuk menyediakan pendidikan berkualitas yang bernapaskan Islam.</p><p>Hingga saat ini, kami terus berinovasi dan mencetak alumni yang berkontribusi bagi masyarakat luas.</p>',
+                'hero_title' => 'Membentuk Generasi Cerdas Berkarakter',
+                'hero_text' => 'Selamat datang di MAS MIFTAHUL QULUB. Kami berkomitmen untuk menyediakan pendidikan berkualitas tinggi, memadukan inovasi digital dengan nilai-nilai luhur agama untuk masa depan yang lebih baik.',
+                'about_text' => '<h2 class="ql-align-justify">Institusi Pendidikan Terkemuka dengan Fasilitas Modern</h2><p class="ql-align-justify">Sejak didirikan, MAS MIFTAHUL QULUB terus bertransformasi menjadi pusat keunggulan akademik. Kami percaya bahwa lingkungan belajar yang kondusif, didukung oleh teknologi terkini, adalah kunci untuk mencetak pemimpin masa depan. Kurikulum kami dirancang untuk menantang pemikiran kritis sekaligus menumbuhkan empati sosial.</p><ul><li class="ql-align-justify">Akreditasi A Berstandar Nasional</li><li class="ql-align-justify">Laboratorium Sains &amp; Komputer Lengkap</li><li class="ql-align-justify">Tenaga Pengajar Tersertifikasi</li></ul>',
+            ]
+        );
     }
 }
