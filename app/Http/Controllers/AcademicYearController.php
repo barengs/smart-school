@@ -20,7 +20,15 @@ class AcademicYearController extends Controller
         ]);
 
         if ($request->is_active) {
-            AcademicYear::where('is_active', true)->update(['is_active' => false]);
+            AcademicYear::query()->update(['is_active' => false]);
+            $validated['is_active'] = true;
+        } else {
+            // Jika ini tahun ajaran pertama, paksa jadi aktif
+            if (AcademicYear::count() === 0) {
+                $validated['is_active'] = true;
+            } else {
+                $validated['is_active'] = false;
+            }
         }
 
         $academicYear = AcademicYear::create($validated);
@@ -41,8 +49,16 @@ class AcademicYearController extends Controller
             'is_active' => 'boolean'
         ]);
 
-        if (isset($validated['is_active']) && $validated['is_active']) {
-            AcademicYear::where('id', '!=', $id)->update(['is_active' => false]);
+        if (isset($validated['is_active'])) {
+            if ($validated['is_active']) {
+                AcademicYear::where('id', '!=', $id)->update(['is_active' => false]);
+            } else {
+                // Jangan izinkan dinonaktifkan jika tidak ada tahun ajaran lain yang aktif
+                $otherActiveExists = AcademicYear::where('id', '!=', $id)->where('is_active', true)->exists();
+                if (!$otherActiveExists) {
+                    return response()->json(['message' => 'Minimal harus ada satu Tahun Ajaran yang aktif! Pilih Tahun Ajaran lain untuk diaktifkan terlebih dahulu.'], 422);
+                }
+            }
         }
 
         $academicYear->update($validated);

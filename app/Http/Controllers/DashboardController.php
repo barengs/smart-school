@@ -105,6 +105,27 @@ class DashboardController extends Controller
         // Sort by date DESC and take top 5
         $recentActivities = $recentActivities->sortByDesc('date')->take(6)->values()->all();
 
+        // Attendance Stats by Class
+        $attendanceStats = DB::table('attendances')
+            ->join('meetings', 'attendances.meeting_id', '=', 'meetings.id')
+            ->join('schedules', 'meetings.schedule_id', '=', 'schedules.id')
+            ->join('classrooms', 'schedules.classroom_id', '=', 'classrooms.id')
+            ->select('classrooms.name as class_name')
+            ->selectRaw('COUNT(attendances.id) as total_attendance')
+            ->selectRaw('SUM(CASE WHEN attendances.status = "present" THEN 1 ELSE 0 END) as present_count')
+            ->whereYear('attendances.created_at', $year)
+            ->groupBy('classrooms.id', 'classrooms.name')
+            ->orderBy('classrooms.name')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'class_name' => $item->class_name,
+                    'percentage' => $item->total_attendance > 0 ? round(($item->present_count / $item->total_attendance) * 100, 1) : 0,
+                    'total' => $item->total_attendance,
+                    'present' => $item->present_count
+                ];
+            });
+
         return [
             'stats' => [
                 'total_ppdb' => $totalPpdb,
@@ -114,7 +135,8 @@ class DashboardController extends Controller
                 'active_roles' => $activeRoles
             ],
             'chart' => $chartData,
-            'recent_activities' => $recentActivities
+            'recent_activities' => $recentActivities,
+            'attendance_stats' => $attendanceStats
         ];
     }
 }

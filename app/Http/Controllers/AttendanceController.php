@@ -114,6 +114,32 @@ class AttendanceController extends Controller
         return response()->json(['message' => 'Presensi berhasil disimpan', 'meeting' => $meeting]);
     }
 
+    public function summary(Request $request)
+    {
+        $classroom = $request->query('classroom_id');
+        $subject = $request->query('subject_id');
+        $semester = $request->query('semester_id');
+
+        if (!$classroom || !$subject || !$semester) {
+            return response()->json([]);
+        }
+
+        $schedules = Schedule::where('classroom_id', $classroom)
+            ->where('subject_id', $subject)
+            ->where('semester_id', $semester)
+            ->pluck('id');
+
+        $meetingIds = Meeting::whereIn('schedule_id', $schedules)->pluck('id');
+
+        $attendances = Attendance::whereIn('meeting_id', $meetingIds)
+            ->select('student_id', \DB::raw('count(*) as total'), \DB::raw("sum(case when status='hadir' then 1 else 0 end) as hadir"))
+            ->groupBy('student_id')
+            ->get()
+            ->keyBy('student_id');
+
+        return response()->json($attendances);
+    }
+
     // Kept for apiResource compatibility
     public function index(Request $request) { return response()->json([]); }
     public function store(Request $request) { return $this->saveMeeting($request); }

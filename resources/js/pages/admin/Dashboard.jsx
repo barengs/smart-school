@@ -13,7 +13,8 @@ const Dashboard = () => {
             active_roles: 0
         },
         chart: [],
-        recent_activities: []
+        recent_activities: [],
+        attendance_stats: []
     });
     const [loading, setLoading] = useState(true);
     const [year, setYear] = useState(new Date().getFullYear().toString());
@@ -222,6 +223,38 @@ const Dashboard = () => {
                         )}
                     </div>
                 </div>
+            </div>
+
+            {/* Attendance Stats Section */}
+            <div className="mt-stack-lg bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col">
+                <div className="flex items-center justify-between mb-stack-md">
+                    <h3 className="font-label-md text-label-md text-on-background">Statistik Presensi per Kelas</h3>
+                </div>
+                {loading ? (
+                    <div className="py-4 text-center text-sm text-on-surface-variant">Memuat...</div>
+                ) : data.attendance_stats && data.attendance_stats.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md">
+                        {data.attendance_stats.map((stat, index) => (
+                            <div key={index} className="bg-surface-container-low rounded-lg p-stack-md border border-outline-variant/50">
+                                <div className="flex justify-between items-center mb-2">
+                                    <h4 className="font-label-md text-on-background">{stat.class_name}</h4>
+                                    <span className="font-label-sm text-primary">{stat.percentage}%</span>
+                                </div>
+                                <div className="w-full bg-surface-container-highest rounded-full h-2 mb-1">
+                                    <div 
+                                        className="bg-primary h-2 rounded-full transition-all duration-500" 
+                                        style={{ width: `${stat.percentage}%` }}
+                                    ></div>
+                                </div>
+                                <div className="text-[11px] text-on-surface-variant text-right">
+                                    {stat.present} / {stat.total} kehadiran
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="py-4 text-center text-sm text-on-surface-variant">Belum ada data presensi tahun ini.</div>
+                )}
             </div>
         </>
     );

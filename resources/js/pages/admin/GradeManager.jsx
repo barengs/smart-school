@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGrades, saveGrade } from '../../store/gradeSlice';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import * as XLSX from 'xlsx';
 
 const GradeManager = () => {
     const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const GradeManager = () => {
     const [selectedSubject, setSelectedSubject] = useState('');
     const [selectedSemester, setSelectedSemester] = useState('');
     const [students, setStudents] = useState([]);
+    const [attendances, setAttendances] = useState({});
 
     useEffect(() => {
         axios.get('/classrooms').then(res => setClassrooms(res.data)).catch(console.error);
@@ -39,6 +41,11 @@ const GradeManager = () => {
             // Filter students by classroom manually or ideally via backend. Assuming students have classrooms relation.
             const clsStudents = res.data.filter(s => s.classrooms?.some(c => c.id == selectedClassroom));
             setStudents(clsStudents);
+
+            const attRes = await axios.get('/attendances/summary', { 
+                params: { classroom_id: selectedClassroom, subject_id: selectedSubject, semester_id: selectedSemester } 
+            });
+            setAttendances(attRes.data);
         } catch(e) {
             console.error(e);
         }
@@ -75,11 +82,50 @@ const GradeManager = () => {
         return existing ? existing[field] || '' : '';
     };
 
+    const handleExportExcel = () => {
+        if (!selectedClassroom || !selectedSubject || !selectedSemester) {
+            toast.error('Pilih Kelas, Mata Pelajaran, dan Semester terlebih dahulu');
+            return;
+        }
+
+        const data = students.map(student => {
+            const att = attendances[student.id];
+            const kehadiran = att && att.total > 0 ? `${att.hadir}/${att.total} (${Math.round(att.hadir/att.total*100)}%)` : '-';
+            return {
+                'NIS': student.nis || '-',
+                'Nama Siswa': student.user?.name || '-',
+                'Kehadiran': kehadiran,
+                'Nilai Tugas': getGradeValue(student.id, 'assignment_score'),
+                'Nilai UTS': getGradeValue(student.id, 'midterm_score'),
+                'Nilai UAS': getGradeValue(student.id, 'final_score'),
+                'Nilai Akhir': getGradeValue(student.id, 'final_grade')
+            };
+        });
+
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Nilai");
+        
+        const className = classrooms.find(c => c.id == selectedClassroom)?.name || 'Kelas';
+        const subjName = subjects.find(s => s.id == selectedSubject)?.name || 'Mapel';
+        
+        XLSX.writeFile(wb, `Nilai_${className}_${subjName}.xlsx`);
+    };
+
     return (
         <div className="w-full flex flex-col h-full min-h-0">
-            <div className="mb-6">
-                <h1 className="font-headline-lg text-headline-lg text-on-background">Manajemen Penilaian</h1>
-                <p className="font-body-md text-on-surface-variant mt-1">Kelola nilai akademik siswa (Tugas, UTS, UAS).</p>
+            <div className="mb-6 flex justify-between items-end">
+                <div>
+                    <h1 className="font-headline-lg text-headline-lg text-on-background">Manajemen Penilaian</h1>
+                    <p className="font-body-md text-on-surface-variant mt-1">Kelola nilai akademik siswa (Tugas, UTS, UAS).</p>
+                </div>
+                <button 
+                    onClick={handleExportExcel}
+                    className="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg hover:bg-secondary/90 transition-colors"
+                >
+                    <span className="material-symbols-outlined">download</span>
+                    Export Excel
+                </button>
             </div>
 
             <div className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -112,6 +158,7 @@ const GradeManager = () => {
                         <thead className="bg-surface-container-low border-b uppercase text-xs">
                             <tr>
                                 <th className="px-4 py-3">Nama Siswa</th>
+                                <th className="px-4 py-3 w-32 text-center">Kehadiran</th>
                                 <th className="px-4 py-3 w-32">Nilai Tugas</th>
                                 <th className="px-4 py-3 w-32">Nilai UTS</th>
                                 <th className="px-4 py-3 w-32">Nilai UAS</th>
@@ -122,6 +169,11 @@ const GradeManager = () => {
                             {students.length > 0 ? students.map(student => (
                                 <tr key={student.id} className="hover:bg-surface-container-lowest/50">
                                     <td className="px-4 py-2 font-medium">{student.user?.name}</td>
+                                    <td className="px-4 py-2 text-center text-xs text-on-surface-variant font-code">
+                                        {attendances[student.id] && attendances[student.id].total > 0
+                                            ? `${attendances[student.id].hadir}/${attendances[student.id].total} (${Math.round(attendances[student.id].hadir/attendances[student.id].total*100)}%)`
+                                            : '-'}
+                                    </td>
                                     <td className="px-4 py-2">
                                         <input type="number" 
                                             className="w-full p-1 border rounded text-center" 
@@ -149,7 +201,7 @@ const GradeManager = () => {
                                 </tr>
                             )) : (
                                 <tr>
-                                    <td colSpan="5" className="px-4 py-8 text-center text-on-surface-variant">Belum ada data siswa di kelas ini.</td>
+                                    <td colSpan="6" className="px-4 py-8 text-center text-on-surface-variant">Belum ada data siswa di kelas ini.</td>
                                 </tr>
                             )}
                         </tbody>

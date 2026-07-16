@@ -38,6 +38,8 @@ class MenuSeeder extends Seeder
         Menu::create(['label' => 'Jam Pelajaran', 'url' => '/admin/lesson-hours', 'icon' => 'schedule', 'sort_order' => 4, 'type' => 'admin', 'parent_id' => $akademik->id, 'module' => 'AKADEMIK']);
         Menu::create(['label' => 'Kalender Akademik', 'url' => '/admin/academic-calendar', 'icon' => 'calendar_month', 'sort_order' => 5, 'type' => 'admin', 'parent_id' => $akademik->id, 'module' => 'AKADEMIK']);
         Menu::create(['label' => 'Tahun Ajaran', 'url' => '/admin/academic-years', 'icon' => 'date_range', 'sort_order' => 6, 'type' => 'admin', 'parent_id' => $akademik->id, 'module' => 'AKADEMIK']);
+        Menu::create(['label' => 'Manajemen Nilai', 'url' => '/admin/grades', 'icon' => 'fact_check', 'sort_order' => 7, 'type' => 'admin', 'parent_id' => $akademik->id, 'module' => 'AKADEMIK']);
+        Menu::create(['label' => 'Kenaikan Kelas', 'url' => '/admin/promotions', 'icon' => 'trending_up', 'sort_order' => 8, 'type' => 'admin', 'parent_id' => $akademik->id, 'module' => 'AKADEMIK']);
 
         // PPDB (Parent)
         $ppdb = Menu::create(['label' => 'PPDB', 'url' => '#', 'icon' => 'group_add', 'sort_order' => 4, 'type' => 'admin', 'module' => 'PPDB']);

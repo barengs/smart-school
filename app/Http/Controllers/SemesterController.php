@@ -26,6 +26,14 @@ class SemesterController extends Controller
 
         if ($validated['is_active'] ?? false) {
             Semester::where('academic_year_id', $validated['academic_year_id'])->update(['is_active' => false]);
+            $validated['is_active'] = true;
+        } else {
+            $count = Semester::where('academic_year_id', $validated['academic_year_id'])->count();
+            if ($count === 0) {
+                $validated['is_active'] = true;
+            } else {
+                $validated['is_active'] = false;
+            }
         }
 
         $semester = Semester::create($validated);
@@ -47,10 +55,20 @@ class SemesterController extends Controller
             'is_active' => 'boolean'
         ]);
 
-        if ($validated['is_active'] ?? false) {
-            Semester::where('academic_year_id', $validated['academic_year_id'])
-                ->where('id', '!=', $id)
-                ->update(['is_active' => false]);
+        if (isset($validated['is_active'])) {
+            if ($validated['is_active']) {
+                Semester::where('academic_year_id', $validated['academic_year_id'])
+                    ->where('id', '!=', $id)
+                    ->update(['is_active' => false]);
+            } else {
+                $otherActiveExists = Semester::where('academic_year_id', $validated['academic_year_id'])
+                    ->where('id', '!=', $id)
+                    ->where('is_active', true)
+                    ->exists();
+                if (!$otherActiveExists) {
+                    return response()->json(['message' => 'Minimal harus ada satu Semester yang aktif di tahun ajaran ini! Pilih Semester lain untuk diaktifkan terlebih dahulu.'], 422);
+                }
+            }
         }
 
         $semester->update($validated);
