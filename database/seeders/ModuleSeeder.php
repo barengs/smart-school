@@ -30,8 +30,23 @@ class ModuleSeeder extends Seeder
             ]
         ];
 
+        $moduleIds = [];
         foreach ($modules as $module) {
-            Module::firstOrCreate(['code' => $module['code']], $module);
+            $m = Module::firstOrCreate(['code' => $module['code']], $module);
+            $moduleIds[] = $m->id;
+        }
+
+        // Create default Service package
+        $service = \App\Models\Service::firstOrCreate(
+            ['code' => 'MASTER'],
+            ['name' => 'Paket Master Sekolah', 'description' => 'Paket lengkap dengan semua modul aktif.']
+        );
+        $service->modules()->sync($moduleIds);
+
+        // Assign to SchoolProfile
+        $profile = \App\Models\SchoolProfile::first();
+        if ($profile) {
+            $profile->update(['service_id' => $service->id]);
         }
     }
 }
