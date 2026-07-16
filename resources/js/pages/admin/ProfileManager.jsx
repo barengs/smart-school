@@ -303,7 +303,7 @@ const ProfileManager = () => {
                                             className="px-4 py-2 bg-surface border border-outline-variant rounded-md text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow w-full"
                                         >
                                             <option value="">-- Layanan Dasar (Modul Dasar Saja) --</option>
-                                            {availableServices.map(svc => (
+                                            {(Array.isArray(availableServices) ? availableServices : []).map(svc => (
                                                 <option key={svc.id} value={svc.id}>
                                                     {svc.name} ({svc.modules?.length || 0} Modul)
                                                 </option>
@@ -314,7 +314,7 @@ const ProfileManager = () => {
                                             <div className="mt-4 p-4 border border-outline-variant rounded bg-surface-container-highest">
                                                 <h4 className="font-label-md text-label-md font-bold mb-2">Modul yang Termasuk:</h4>
                                                 <ul className="list-disc list-inside text-sm text-on-surface-variant flex flex-col gap-1">
-                                                    {availableServices.find(s => s.id == profile.service_id)?.modules?.map(m => (
+                                                    {(Array.isArray(availableServices) ? availableServices : []).find(s => s.id == profile.service_id)?.modules?.map(m => (
                                                         <li key={m.id}>{m.name} ({m.code})</li>
                                                     )) || <li>Belum ada modul di paket ini.</li>}
                                                 </ul>

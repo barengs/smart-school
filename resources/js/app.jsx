@@ -16,7 +16,12 @@ axios.interceptors.request.use((config) => {
 });
 
 axios.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        if (typeof response.data === 'string' && response.data.trim().startsWith('<')) {
+            return Promise.reject(new Error('Received HTML response instead of JSON. Check API endpoint.'));
+        }
+        return response;
+    },
     (error) => {
         if (error.response && error.response.status === 401) {
             localStorage.removeItem('token');
