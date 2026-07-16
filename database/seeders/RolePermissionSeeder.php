@@ -35,22 +35,22 @@ class RolePermissionSeeder extends Seeder
                 if ($action === 'approve' && !in_array($label, ['Manajemen Berita', 'Manajemen PPDB'])) {
                     continue;
                 }
-                Permission::firstOrCreate(['name' => $menu->url . '.' . $action, 'menu_id' => $menu->id]);
+                Permission::firstOrCreate(['name' => $menu->url . '.' . $action, 'menu_id' => $menu->id, 'guard_name' => 'api']);
             }
         }
 
         // System permissions
-        $manageSystem = Permission::firstOrCreate(['name' => 'manage-system']);
+        $manageSystem = Permission::firstOrCreate(['name' => 'manage-system', 'guard_name' => 'api']);
 
         // Roles
-        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
+        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'api']);
         // Super Admin gets all menu permissions but NOT manage-system by default
         $superAdmin->givePermissionTo(Permission::where('name', '!=', 'manage-system')->get());
 
-        $developer = Role::firstOrCreate(['name' => 'Developer']);
+        $developer = Role::firstOrCreate(['name' => 'Developer', 'guard_name' => 'api']);
         $developer->givePermissionTo(Permission::all());
 
-        $editor = Role::firstOrCreate(['name' => 'Editor Berita']);
+        $editor = Role::firstOrCreate(['name' => 'Editor Berita', 'guard_name' => 'api']);
         if (isset($menus['Manajemen Berita'])) {
             $editor->givePermissionTo([
                 '/admin/news.view', 
@@ -59,7 +59,7 @@ class RolePermissionSeeder extends Seeder
             ]);
         }
 
-        $reviewer = Role::firstOrCreate(['name' => 'Reviewer PPDB']);
+        $reviewer = Role::firstOrCreate(['name' => 'Reviewer PPDB', 'guard_name' => 'api']);
         if (isset($menus['Manajemen PPDB'])) {
             $reviewer->givePermissionTo([
                 '/admin/ppdb.view', 
