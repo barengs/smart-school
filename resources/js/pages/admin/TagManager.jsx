@@ -10,10 +10,8 @@ const TagManager = () => {
     const { items: tags, loading, initialized } = useSelector((state) => state.tag);
 
     useEffect(() => {
-        if (!initialized) {
-            dispatch(fetchTags());
-        }
-    }, [dispatch, initialized]);
+        dispatch(fetchTags());
+    }, [dispatch]);
 
     const handleDelete = (id) => {
         if (!window.confirm('Yakin ingin menghapus tag ini?')) return;

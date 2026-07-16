@@ -15,7 +15,9 @@ export function DataTable({
     onAdd,
     addLabel = "Tambah Data",
     onExport,
-    onRowClick
+    onRowClick,
+    groupBy,
+    customFilters
 }) {
     const [globalFilter, setGlobalFilter] = useState('');
     const [sorting, setSorting] = useState([]);
@@ -48,7 +50,8 @@ export function DataTable({
                         className="bg-transparent border-none focus:ring-0 text-sm w-full outline-none"
                     />
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+                    {customFilters && <div className="flex gap-2 w-full md:w-auto">{customFilters}</div>}
                     {onExport && (
                         <button
                             onClick={onExport}
@@ -94,17 +97,41 @@ export function DataTable({
                         ))}
                     </thead>
                     <tbody className="divide-y divide-outline-variant/50">
-                        {table.getRowModel().rows.length > 0 ? (
-                            table.getRowModel().rows.map((row) => (
-                                <tr key={row.id} onClick={() => onRowClick && onRowClick(row.original)} className={`hover:bg-surface-container-lowest/50 transition-colors ${onRowClick ? 'cursor-pointer' : ''}`}>
-                                    {row.getVisibleCells().map((cell) => (
-                                        <td key={cell.id} className="px-4 py-2">
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        ) : (
+                        {table.getRowModel().rows.length > 0 ? (() => {
+                            let lastGroupValue = null;
+                            return table.getRowModel().rows.map((row) => {
+                                let groupHeaderRow = null;
+                                if (groupBy) {
+                                    const parts = groupBy.split('.');
+                                    let val = row.original;
+                                    for (let p of parts) val = val?.[p];
+                                    
+                                    if (val !== lastGroupValue) {
+                                        groupHeaderRow = (
+                                            <tr key={`group-${val}`}>
+                                                <td colSpan={columns.length} className="px-4 py-2 font-bold bg-surface-container text-on-surface">
+                                                    Kelas {val}
+                                                </td>
+                                            </tr>
+                                        );
+                                        lastGroupValue = val;
+                                    }
+                                }
+
+                                return (
+                                    <React.Fragment key={row.id}>
+                                        {groupHeaderRow}
+                                        <tr onClick={() => onRowClick && onRowClick(row.original)} className={`hover:bg-surface-container-lowest/50 transition-colors ${onRowClick ? 'cursor-pointer' : ''}`}>
+                                            {row.getVisibleCells().map((cell) => (
+                                                <td key={cell.id} className="px-4 py-2">
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    </React.Fragment>
+                                );
+                            });
+                        })() : (
                             <tr>
                                 <td colSpan={columns.length} className="px-6 py-8 text-center text-on-surface-variant">
                                     Tidak ada data ditemukan.

@@ -38,6 +38,11 @@ class ProfileController extends Controller
         
         $data = $request->except(['logo', 'favicon', '_method', 'name', 'phone']);
         
+        // Only allow changing service_id if user has manage-system permission
+        if (isset($data['service_id']) && (!$request->user() || !$request->user()->can('manage-system'))) {
+            unset($data['service_id']);
+        }
+        
         if ($request->has('name')) {
             $data['school_name'] = $request->name;
         }

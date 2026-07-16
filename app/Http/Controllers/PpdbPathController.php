@@ -17,7 +17,9 @@ class PpdbPathController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:ppdb_paths',
             'description' => 'nullable|string',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'requires_cbt' => 'boolean',
+            'cbt_exam_id' => 'nullable|integer|exists:cbt_exams,id'
         ]);
 
         $path = PpdbPath::create($validated);
@@ -36,7 +38,9 @@ class PpdbPathController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255|unique:ppdb_paths,name,' . $id,
             'description' => 'nullable|string',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'requires_cbt' => 'boolean',
+            'cbt_exam_id' => 'nullable|integer|exists:cbt_exams,id'
         ]);
 
         $path->update($validated);

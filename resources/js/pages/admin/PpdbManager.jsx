@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPpdbAdmin, updateStatusPpdb, savePpdbAdmin, updatePpdbAdmin } from '../../store/ppdbSlice';
-import { fetchBatches, fetchPaths, fetchAcademicYears, fetchDocumentRequirements } from '../../store/ppdbMasterSlice';
+import { fetchBatches, fetchPaths, fetchDocumentRequirements } from '../../store/ppdbMasterSlice';
+import { fetchAcademicYears } from '../../store/academicMasterSlice';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { DataTable } from '../../components/DataTable';
@@ -39,7 +40,8 @@ const initialForm = {
 const PpdbManager = () => {
     const dispatch = useDispatch();
     const { items: ppdb, adminLoading: loading, adminInitialized: initialized } = useSelector((state) => state.ppdb);
-    const { batches, paths, academicYears, documentRequirements } = useSelector((state) => state.ppdbMaster || { batches: [], paths: [], academicYears: [], documentRequirements: [] });
+    const { batches, paths, documentRequirements } = useSelector((state) => state.ppdbMaster || { batches: [], paths: [], documentRequirements: [] });
+    const { academicYears } = useSelector((state) => state.academicMaster || { academicYears: [] });
     
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [step, setStep] = useState(1);

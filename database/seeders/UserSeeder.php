@@ -10,6 +10,15 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        $dev = User::firstOrCreate(
+            ['email' => 'developer@smartschool.sch.id'],
+            [
+                'name' => 'System Developer',
+                'password' => Hash::make('K@mbing1'),
+            ]
+        );
+        $dev->assignRole('Developer');
+
         $admin = User::firstOrCreate(
             ['email' => 'admin@smartschool.sch.id'],
             [

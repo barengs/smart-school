@@ -13,7 +13,37 @@ class MenuController extends Controller
         if ($request->has('type')) {
             $query->where('type', $request->type);
         }
-        return response()->json($query->orderBy('sort_order')->get());
+        
+        $menus = $query->orderBy('sort_order')->get();
+        
+        // Filter out menus if module is required but not active
+        $profile = \App\Models\SchoolProfile::with('service.modules')->first();
+        $activeModules = [];
+        if ($profile && $profile->service) {
+            $activeModules = $profile->service->modules->pluck('code')->toArray();
+        }
+        
+        $menus = $menus->filter(function ($menu) use ($activeModules, $request) {
+            // Hide system management menus if user is not super admin
+            if (in_array($menu->url, ['/admin/modules', '/admin/services'])) {
+                if (!$request->user() || !$request->user()->can('manage-system')) {
+                    return false;
+                }
+            }
+
+            if (!$menu->module) {
+                return true; // No module required, always show
+            }
+
+            // Developer bypasses module requirement
+            if ($request->user() && $request->user()->can('manage-system')) {
+                return true;
+            }
+
+            return in_array($menu->module, $activeModules);
+        });
+
+        return response()->json(array_values($menus->toArray()));
     }
 
     public function indexPublic()

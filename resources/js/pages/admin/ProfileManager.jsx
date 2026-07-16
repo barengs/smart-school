@@ -6,11 +6,13 @@ import { Input } from '../../components/ui/Input';
 import { Textarea } from '../../components/ui/Textarea';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import axios from 'axios';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 
 const ProfileManager = () => {
     const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
     const { data: profileData, loading, initialized } = useSelector((state) => state.profile);
     
     // Local state for the form so user can edit before saving
@@ -34,15 +36,19 @@ const ProfileManager = () => {
         about_image: null,
         logo: null,
         favicon: null,
-        public_theme: 'default'
+        public_theme: 'default',
+        service_id: ''
     });
     const [saving, setSaving] = useState(false);
     const [activeTab, setActiveTab] = useState('general');
+    const [availableServices, setAvailableServices] = useState([]);
 
     useEffect(() => {
         if (!initialized) {
             dispatch(fetchProfile());
         }
+        // Fetch all available services
+        axios.get('/services').then(res => setAvailableServices(res.data)).catch(console.error);
     }, [dispatch, initialized]);
 
     // Sync local state when Redux data changes
@@ -112,6 +118,14 @@ const ProfileManager = () => {
                 >
                     Visi, Misi & Sejarah
                 </button>
+                {user?.permissions?.includes('manage-system') && (
+                    <button
+                        onClick={() => setActiveTab('services')}
+                        className={`px-6 py-3 font-label-lg text-label-lg whitespace-nowrap transition-colors border-b-2 ${activeTab === 'services' ? 'border-primary text-primary font-bold' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
+                    >
+                        Layanan & Modul
+                    </button>
+                )}
             </div>
 
             <div className="relative">
@@ -272,6 +286,44 @@ const ProfileManager = () => {
                                 </div>
                             </div>
                         </div>
+
+                        {/* TAB 4: SERVICES */}
+                        {user?.permissions?.includes('manage-system') && (
+                            <div className={activeTab === 'services' ? 'block' : 'hidden'}>
+                                <div className="grid grid-cols-1 gap-gutter">
+                                    <h3 className="font-headline-sm text-headline-sm text-on-surface">Paket Layanan</h3>
+                                    <p className="font-body-sm text-on-surface-variant mb-4">Pilih paket layanan yang menentukan modul apa saja yang dapat diakses oleh sekolah ini.</p>
+                                    
+                                    <div className="flex flex-col gap-2 w-full md:w-1/2">
+                                        <label className="font-label-md text-label-md text-on-surface font-bold">Pilih Paket Layanan</label>
+                                        <select
+                                            name="service_id"
+                                            value={profile.service_id || ''}
+                                            onChange={handleChange}
+                                            className="px-4 py-2 bg-surface border border-outline-variant rounded-md text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow w-full"
+                                        >
+                                            <option value="">-- Layanan Dasar (Modul Dasar Saja) --</option>
+                                            {availableServices.map(svc => (
+                                                <option key={svc.id} value={svc.id}>
+                                                    {svc.name} ({svc.modules?.length || 0} Modul)
+                                                </option>
+                                            ))}
+                                        </select>
+                                        
+                                        {profile.service_id && (
+                                            <div className="mt-4 p-4 border border-outline-variant rounded bg-surface-container-highest">
+                                                <h4 className="font-label-md text-label-md font-bold mb-2">Modul yang Termasuk:</h4>
+                                                <ul className="list-disc list-inside text-sm text-on-surface-variant flex flex-col gap-1">
+                                                    {availableServices.find(s => s.id == profile.service_id)?.modules?.map(m => (
+                                                        <li key={m.id}>{m.name} ({m.code})</li>
+                                                    )) || <li>Belum ada modul di paket ini.</li>}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         <div className="flex justify-end pt-4 mt-6 border-t border-outline-variant">
                             <Button type="submit" disabled={saving} className="gap-2">

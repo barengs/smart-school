@@ -33,6 +33,12 @@ class PageController extends Controller
         return response()->json($page);
     }
 
+    public function getBySlug($slug)
+    {
+        $page = Page::where('slug', $slug)->where('is_published', true)->firstOrFail();
+        return response()->json($page);
+    }
+
     public function update(Request $request, $id)
     {
         $page = Page::findOrFail($id);

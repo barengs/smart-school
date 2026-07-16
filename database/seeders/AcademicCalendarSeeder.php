@@ -23,17 +23,7 @@ class AcademicCalendarSeeder extends Seeder
             'title' => 'Ujian Tengah Semester',
             'start_date' => date('Y-m-d', strtotime('+1 month')),
             'end_date' => date('Y-m-d', strtotime('+1 month 7 days')),
-            'type' => 'exam'
+            'type' => 'holiday'
         ]);
-
-        \App\Models\Menu::firstOrCreate(
-            ['url' => '/admin/academic-calendar'],
-            [
-                'label' => 'Kalender Akademik',
-                'icon' => 'calendar_month',
-                'type' => 'admin',
-                'sort_order' => 15,
-            ]
-        );
     }
 }

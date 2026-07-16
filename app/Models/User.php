@@ -19,6 +19,8 @@ class User extends Authenticatable implements JWTSubject
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
+    protected $guard_name = 'api';
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
