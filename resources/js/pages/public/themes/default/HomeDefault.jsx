@@ -187,8 +187,51 @@ const HomeDefault = () => {
                 </div>
             </section>
 
+            {/* Latest News Section */}
+            <section className="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto border-b border-outline-variant">
+                <div className="flex justify-between items-end mb-stack-md">
+                    <div>
+                        <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Berita Terbaru</h2>
+                        <p className="font-body-md text-body-md text-on-surface-variant">Informasi dan kegiatan terkini dari lingkungan sekolah.</p>
+                    </div>
+                    <Link to="/news" className="hidden md:flex items-center text-primary font-label-md text-label-md hover:underline">
+                        Semua Berita <span className="material-symbols-outlined ml-1 text-[18px]">arrow_forward</span>
+                    </Link>
+                </div>
+
+                {loading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                        {[...Array(4)].map((_, i) => <NewsCardSkeleton key={i} />)}
+                    </div>
+                ) : (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                            {latestNews.map((news) => (
+                                <Link to={`/news/${news.slug}`} key={news.id} className="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:-translate-y-1 transition-transform duration-200 group flex flex-col shadow-sm">
+                                    <img src={news.cover_image ? `/storage/${news.cover_image}` : '/assets/images/robotic competition.png'} alt={news.title} className="w-full h-48 object-cover border-b border-outline-variant group-hover:scale-105 transition-transform duration-300" />
+                                    <div className="p-stack-md flex flex-col gap-stack-sm h-[200px] bg-surface-container-lowest z-10 relative">
+                                        <div className="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+                                            <span className="material-symbols-outlined text-[16px]">calendar_today</span> 
+                                            {new Date(news.published_at || news.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                        </div>
+                                        <h3 className="font-headline-md text-[18px] leading-tight text-on-surface group-hover:text-primary transition-colors line-clamp-2">{news.title}</h3>
+                                        <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-3" dangerouslySetInnerHTML={{ __html: news.content.replace(/<[^>]*>?/gm, '') }}></p>
+                                    </div>
+                                </Link>
+                            ))}
+                            {latestNews.length === 0 && (
+                                <div className="col-span-full text-center text-on-surface-variant py-8">Belum ada berita.</div>
+                            )}
+                        </div>
+                        <Link className="md:hidden mt-stack-md flex justify-center items-center text-primary font-label-md text-label-md hover:underline w-full py-2 border border-outline-variant rounded bg-surface-container-lowest" to="/news">
+                            Lihat Semua Berita
+                        </Link>
+                    </>
+                )}
+            </section>
+
             {/* Academic Calendar Widget */}
-            <section id="kalender-akademik" className="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto border-b border-outline-variant scroll-mt-24">
+            <section id="kalender-akademik" className="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-stack-lg scroll-mt-24">
                 <div className="flex flex-col mb-stack-md">
                     <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Kalender Akademik</h2>
                     <p className="font-body-md text-body-md text-on-surface-variant">Jadwal penting {schoolName}.</p>
@@ -263,49 +306,6 @@ const HomeDefault = () => {
                     </div>
                 </div>
             )}
-
-            {/* Latest News Section */}
-            <section className="py-stack-lg px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-stack-lg">
-                <div className="flex justify-between items-end mb-stack-md">
-                    <div>
-                        <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Berita Terbaru</h2>
-                        <p className="font-body-md text-body-md text-on-surface-variant">Informasi dan kegiatan terkini dari lingkungan sekolah.</p>
-                    </div>
-                    <Link to="/news" className="hidden md:flex items-center text-primary font-label-md text-label-md hover:underline">
-                        Semua Berita <span className="material-symbols-outlined ml-1 text-[18px]">arrow_forward</span>
-                    </Link>
-                </div>
-
-                {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-                        {[...Array(4)].map((_, i) => <NewsCardSkeleton key={i} />)}
-                    </div>
-                ) : (
-                    <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-                            {latestNews.map((news) => (
-                                <Link to={`/news/${news.slug}`} key={news.id} className="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden hover:-translate-y-1 transition-transform duration-200 group flex flex-col shadow-sm">
-                                    <img src={news.cover_image ? `/storage/${news.cover_image}` : '/assets/images/robotic competition.png'} alt={news.title} className="w-full h-48 object-cover border-b border-outline-variant group-hover:scale-105 transition-transform duration-300" />
-                                    <div className="p-stack-md flex flex-col gap-stack-sm h-[200px] bg-surface-container-lowest z-10 relative">
-                                        <div className="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
-                                            <span className="material-symbols-outlined text-[16px]">calendar_today</span> 
-                                            {new Date(news.published_at || news.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                        </div>
-                                        <h3 className="font-headline-md text-[18px] leading-tight text-on-surface group-hover:text-primary transition-colors line-clamp-2">{news.title}</h3>
-                                        <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-3" dangerouslySetInnerHTML={{ __html: news.content.replace(/<[^>]*>?/gm, '') }}></p>
-                                    </div>
-                                </Link>
-                            ))}
-                            {latestNews.length === 0 && (
-                                <div className="col-span-full text-center text-on-surface-variant py-8">Belum ada berita.</div>
-                            )}
-                        </div>
-                        <Link className="md:hidden mt-stack-md flex justify-center items-center text-primary font-label-md text-label-md hover:underline w-full py-2 border border-outline-variant rounded bg-surface-container-lowest" to="/news">
-                            Lihat Semua Berita
-                        </Link>
-                    </>
-                )}
-            </section>
         </>
     );
 };

@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             ContactMenuSeeder::class,
             PpdbMasterSeeder::class,
             PpdbRegistrationSeeder::class,
+            ModuleSeeder::class,
+            AcademicDataSeeder::class,
         ]);
     }
 }

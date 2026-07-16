@@ -17,9 +17,14 @@ const MenuManager = () => {
     // Draft State for Reordering
     const [draftMenus, setDraftMenus] = useState([]);
     
+    // Pages State
+    const [pages, setPages] = useState([]);
+    
     // Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingMenu, setEditingMenu] = useState(null);
+    const [linkType, setLinkType] = useState('custom'); // custom or page
+    const [selectedPageSlug, setSelectedPageSlug] = useState('');
     const [formData, setFormData] = useState({
         label: '',
         url: '',
@@ -39,6 +44,9 @@ const MenuManager = () => {
         } else if (activeTab === 'admin' && !initializedAdmin) {
             dispatch(fetchMenus('admin'));
         }
+        
+        // Fetch pages for dropdown
+        axios.get('/pages').then(res => setPages(res.data)).catch(() => {});
     }, [activeTab, initializedFront, initializedAdmin, dispatch]);
 
     // Sync draftMenus whenever currentReduxMenus changes or tab changes
@@ -67,6 +75,8 @@ const MenuManager = () => {
 
     const handleAdd = () => {
         setEditingMenu(null);
+        setLinkType('custom');
+        setSelectedPageSlug('');
         setFormData({
             label: '',
             url: '',
@@ -80,6 +90,15 @@ const MenuManager = () => {
 
     const handleEdit = (menu) => {
         setEditingMenu(menu);
+        
+        if (menu.url && menu.url.startsWith('/p/')) {
+            setLinkType('page');
+            setSelectedPageSlug(menu.url.replace('/p/', ''));
+        } else {
+            setLinkType('custom');
+            setSelectedPageSlug('');
+        }
+        
         setFormData({
             label: menu.label,
             url: menu.url || '',
@@ -93,8 +112,15 @@ const MenuManager = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        let finalUrl = formData.url;
+        if (linkType === 'page' && selectedPageSlug) {
+            finalUrl = `/p/${selectedPageSlug}`;
+        }
+        
         const payload = {
             ...formData,
+            url: finalUrl,
             parent_id: formData.parent_id === '' ? null : formData.parent_id
         };
         try {
@@ -185,7 +211,7 @@ const MenuManager = () => {
         return (
             <div key={menu.id} className="flex flex-col">
                 <div 
-                    className={`flex items-center justify-between py-3 px-4 bg-surface-container-lowest border border-outline-variant rounded-lg mb-2 hover:border-primary/50 hover:shadow-sm transition-all`}
+                    className={`flex items-center justify-between py-2 px-4 bg-surface-container-lowest border border-outline-variant -mb-px hover:bg-surface-container-low transition-all relative z-10 hover:z-20`}
                     style={{ marginLeft: `${depth * 2.5}rem` }}
                 >
                     <div className="flex items-center gap-3">
@@ -293,7 +319,38 @@ const MenuManager = () => {
                         </div>
                         <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
                             <Input type="text" required value={formData.label} onChange={(e) => setFormData({...formData, label: e.target.value})} label="Label Menu" placeholder="Contoh: Beranda" />
-                            <Input type="text" required value={formData.url} onChange={(e) => setFormData({...formData, url: e.target.value})} label="URL / Path" placeholder="Contoh: / atau /news" className="font-code text-sm" />
+                            
+                            <div className="flex flex-col gap-2 bg-surface p-3 rounded border border-outline-variant">
+                                <label className="block text-sm font-medium text-on-surface">Tipe Tautan</label>
+                                <div className="flex gap-4 mb-2">
+                                    <label className="flex items-center gap-2">
+                                        <input type="radio" name="link_type" checked={linkType === 'custom'} onChange={() => setLinkType('custom')} className="text-primary focus:ring-primary" />
+                                        <span className="text-sm">URL Custom</span>
+                                    </label>
+                                    <label className="flex items-center gap-2">
+                                        <input type="radio" name="link_type" checked={linkType === 'page'} onChange={() => setLinkType('page')} className="text-primary focus:ring-primary" />
+                                        <span className="text-sm">Halaman Dinamis</span>
+                                    </label>
+                                </div>
+                                
+                                {linkType === 'custom' ? (
+                                    <Input type="text" required value={formData.url} onChange={(e) => setFormData({...formData, url: e.target.value})} label="URL / Path" placeholder="Contoh: / atau /news" className="font-code text-sm" />
+                                ) : (
+                                    <Select 
+                                        value={selectedPageSlug} 
+                                        onChange={(e) => setSelectedPageSlug(e.target.value)}
+                                        label="Pilih Halaman"
+                                        required={linkType === 'page'}
+                                        options={[
+                                            { value: '', label: '-- Pilih Halaman --' },
+                                            ...pages.filter(p => p.is_published).map(p => ({
+                                                value: p.slug,
+                                                label: p.title
+                                            }))
+                                        ]}
+                                    />
+                                )}
+                            </div>
                             
                             <Select 
                                 value={formData.parent_id} 

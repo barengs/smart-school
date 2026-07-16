@@ -27,6 +27,9 @@ class RolePermissionSeeder extends Seeder
         $actions = ['view', 'create', 'update', 'delete', 'approve'];
         
         foreach ($menus as $label => $menu) {
+            if ($menu->url === '#' || empty($menu->url)) {
+                continue; // Skip creating permissions for parent menus without URL
+            }
             foreach ($actions as $action) {
                 // Ignore approve unless it's news or ppdb
                 if ($action === 'approve' && !in_array($label, ['Manajemen Berita', 'Manajemen PPDB'])) {
@@ -36,9 +39,16 @@ class RolePermissionSeeder extends Seeder
             }
         }
 
+        // System permissions
+        $manageSystem = Permission::firstOrCreate(['name' => 'manage-system']);
+
         // Roles
         $superAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
-        $superAdmin->givePermissionTo(Permission::all());
+        // Super Admin gets all menu permissions but NOT manage-system by default
+        $superAdmin->givePermissionTo(Permission::where('name', '!=', 'manage-system')->get());
+
+        $developer = Role::firstOrCreate(['name' => 'Developer']);
+        $developer->givePermissionTo(Permission::all());
 
         $editor = Role::firstOrCreate(['name' => 'Editor Berita']);
         if (isset($menus['Manajemen Berita'])) {

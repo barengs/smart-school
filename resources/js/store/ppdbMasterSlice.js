@@ -2,38 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-// Academic Years
-export const fetchAcademicYears = createAsyncThunk('ppdbMaster/fetchAcademicYears', async (_, { rejectWithValue }) => {
-    try {
-        const res = await axios.get('/academic-years');
-        return res.data;
-    } catch (err) {
-        return rejectWithValue(err.response?.data?.message || 'Gagal memuat tahun ajaran');
-    }
-});
-export const saveAcademicYear = createAsyncThunk('ppdbMaster/saveAcademicYear', async (data, { rejectWithValue, dispatch }) => {
-    try {
-        if (data.id) await axios.put(`/academic-years/${data.id}`, data);
-        else await axios.post('/academic-years', data);
-        toast.success('Data tahun ajaran disimpan');
-        dispatch(fetchAcademicYears());
-        return true;
-    } catch (err) {
-        toast.error('Gagal menyimpan tahun ajaran');
-        return rejectWithValue(err.response?.data?.message || 'Error saving');
-    }
-});
-export const deleteAcademicYear = createAsyncThunk('ppdbMaster/deleteAcademicYear', async (id, { rejectWithValue, dispatch }) => {
-    try {
-        await axios.delete(`/academic-years/${id}`);
-        toast.success('Tahun ajaran dihapus');
-        dispatch(fetchAcademicYears());
-        return id;
-    } catch (err) {
-        toast.error('Gagal menghapus tahun ajaran');
-        return rejectWithValue(err.response?.data?.message || 'Error deleting');
-    }
-});
+
 
 // Batches
 export const fetchBatches = createAsyncThunk('ppdbMaster/fetchBatches', async (_, { rejectWithValue }) => {
@@ -135,7 +104,6 @@ export const deleteDocumentRequirement = createAsyncThunk('ppdbMaster/deleteDocu
 });
 
 const initialState = {
-    academicYears: [],
     batches: [],
     paths: [],
     documentRequirements: [],
@@ -150,9 +118,6 @@ const ppdbMasterSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAcademicYears.pending, (state) => { state.loading = true; })
-            .addCase(fetchAcademicYears.fulfilled, (state, action) => { state.loading = false; state.academicYears = action.payload; state.initialized = true; })
-            .addCase(fetchAcademicYears.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
             
             .addCase(fetchBatches.pending, (state) => { state.loading = true; })
             .addCase(fetchBatches.fulfilled, (state, action) => { state.loading = false; state.batches = action.payload; })

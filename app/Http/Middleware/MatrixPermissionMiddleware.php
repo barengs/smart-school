@@ -22,7 +22,7 @@ class MatrixPermissionMiddleware
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        if ($user->hasRole('Super Admin')) {
+        if ($user->hasRole('Super Admin') || $user->hasRole('Developer')) {
             return $next($request);
         }
 
@@ -31,7 +31,7 @@ class MatrixPermissionMiddleware
         $method = $request->method();
 
         // Basic mapping for RESTful routes
-        $action = 'read';
+        $action = 'view';
         if ($method === 'POST') $action = 'create';
         if ($method === 'PUT' || $method === 'PATCH') $action = 'update';
         if ($method === 'DELETE') $action = 'delete';

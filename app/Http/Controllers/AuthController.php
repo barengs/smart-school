@@ -42,28 +42,13 @@ class AuthController extends Controller
     public function me()
     {
         $user = Auth::guard('api')->user();
-        
-        // Generate dynamic menu based on matrix role
-        // For simplicity, we just check if user has read permission for each menu
-        $menus = Menu::orderBy('order_number')->get();
-        $dynamicMenu = [];
-        
-        foreach ($menus as $menu) {
-            if ($user->hasPermissionTo($menu->route_path . '.read')) {
-                $dynamicMenu[] = [
-                    'id' => $menu->id,
-                    'name' => $menu->name,
-                    'route_path' => $menu->route_path,
-                    'icon' => $menu->icon,
-                ];
-            }
-        }
 
         return response()->json([
-            'user' => $user,
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
             'roles' => $user->getRoleNames(),
-            'permissions' => $user->getAllPermissions()->pluck('name'),
-            'menus' => $dynamicMenu
+            'permissions' => $user->getAllPermissions()->pluck('name')
         ]);
     }
 

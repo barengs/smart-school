@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            'module' => \App\Http\Middleware\CheckModule::class,
             'matrix' => \App\Http\Middleware\MatrixPermissionMiddleware::class,
         ]);
     })

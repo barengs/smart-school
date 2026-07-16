@@ -14,4 +14,9 @@ class AcademicYear extends Model
     {
         return $this->hasMany(PpdbBatch::class);
     }
+
+    public function semesters()
+    {
+        return $this->hasMany(Semester::class);
+    }
 }
