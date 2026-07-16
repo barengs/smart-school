@@ -99,7 +99,7 @@ class AcademicDataSeeder extends Seeder
         foreach ($classroomData as $cd) {
             $classrooms[] = Classroom::updateOrCreate(
                 ['name' => $cd['name'], 'level' => $cd['level']],
-                ['academic_year_id' => $ay->id, 'teacher_id' => $teachers[$cd['teacher_idx']]->id]
+                ['teacher_id' => $teachers[$cd['teacher_idx']]->id]
             );
         }
 
@@ -135,7 +135,9 @@ class AcademicDataSeeder extends Seeder
             // 6 siswa per kelas
             $classroomIdx = intdiv($idx, 6);
             if ($classroomIdx < count($classrooms)) {
-                $classrooms[$classroomIdx]->students()->syncWithoutDetaching([$student->id]);
+                $classrooms[$classroomIdx]->students()->syncWithoutDetaching([
+                    $student->id => ['academic_year_id' => $ay->id]
+                ]);
             }
         }
 
