@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             OrganizationStructureSeeder::class,
             AcademicCalendarSeeder::class,
             ContactMenuSeeder::class,
+            AcademicMenuSeeder::class,
             PpdbMasterSeeder::class,
             PpdbRegistrationSeeder::class,
             ModuleSeeder::class,
