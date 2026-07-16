@@ -46,6 +46,7 @@ import ClassroomManager from './pages/admin/ClassroomManager';
 import ScheduleManager from './pages/admin/ScheduleManager';
 import ScheduleFormPage from './pages/admin/ScheduleFormPage';
 import TeacherManager from './pages/admin/TeacherManager';
+import StaffManager from './pages/admin/StaffManager';
 import StudentManager from './pages/admin/StudentManager';
 import GradeManager from './pages/admin/GradeManager';
 import PromotionManager from './pages/admin/PromotionManager';
@@ -105,6 +106,7 @@ const AppRouter = () => {
                 <Route path="/admin/schedules/create" element={<ScheduleFormPage />} />
                 <Route path="/admin/schedules/edit/:id" element={<ScheduleFormPage />} />
                 <Route path="/admin/teachers" element={<TeacherManager />} />
+                <Route path="/admin/staffs" element={<StaffManager />} />
                 <Route path="/admin/students" element={<StudentManager />} />
                 <Route path="/admin/grades" element={<GradeManager />} />
                 <Route path="/admin/promotions" element={<PromotionManager />} />

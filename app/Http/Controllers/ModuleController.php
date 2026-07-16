@@ -9,7 +9,7 @@ class ModuleController extends Controller
 {
     public function index()
     {
-        return response()->json(Module::orderBy('code')->get());
+        return response()->json(Module::with('menus')->orderBy('code')->get());
     }
 
     public function store(Request $request)
@@ -18,9 +18,15 @@ class ModuleController extends Controller
             'code' => 'required|string|unique:modules',
             'name' => 'required|string',
             'description' => 'nullable|string',
+            'menu_ids' => 'nullable|array'
         ]);
 
         $module = Module::create($validated);
+        
+        if (isset($validated['menu_ids'])) {
+            \App\Models\Menu::whereIn('id', $validated['menu_ids'])->update(['module' => $module->code]);
+        }
+        
         return response()->json($module, 201);
     }
 
@@ -36,9 +42,18 @@ class ModuleController extends Controller
             'code' => 'required|string|unique:modules,code,'.$id,
             'name' => 'required|string',
             'description' => 'nullable|string',
+            'menu_ids' => 'nullable|array'
         ]);
 
+        $oldCode = $module->code;
         $module->update($validated);
+        
+        \App\Models\Menu::where('module', $oldCode)->update(['module' => null]);
+        
+        if (isset($validated['menu_ids']) && count($validated['menu_ids']) > 0) {
+            \App\Models\Menu::whereIn('id', $validated['menu_ids'])->update(['module' => $module->code]);
+        }
+        
         return response()->json($module);
     }
 

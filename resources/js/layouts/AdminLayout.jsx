@@ -71,7 +71,7 @@ const AdminLayout = () => {
             {/* Monitor and LockScreen are mounted outside the blurred container */}
             <ActivityMonitor />
             {/* Shared Component: SideNavBar */}
-            <aside className={`fixed left-0 top-0 h-screen ${isSidebarCollapsed ? 'w-20' : 'w-sidebar-width'} bg-primary text-on-primary flex flex-col z-50 transition-all duration-300`}>
+            <aside className={`print:hidden fixed left-0 top-0 h-screen ${isSidebarCollapsed ? 'w-20' : 'w-sidebar-width'} bg-primary text-on-primary flex flex-col z-50 transition-all duration-300`}>
                 {/* Header */}
                 <div className={`flex items-center border-b border-white/10 h-16 shrink-0 ${isSidebarCollapsed ? 'justify-center p-0' : 'p-gutter justify-between'}`}>
                     <div className={`flex items-center overflow-hidden ${isSidebarCollapsed ? 'justify-center' : 'gap-stack-md'}`}>
@@ -200,9 +200,9 @@ const AdminLayout = () => {
             </aside>
 
             {/* Main Content Canvas */}
-            <main className={`${isSidebarCollapsed ? 'ml-20' : 'ml-sidebar-width'} flex-1 flex flex-col h-screen overflow-hidden bg-surface transition-all duration-300`}>
+            <main className={`${isSidebarCollapsed ? 'ml-20' : 'ml-sidebar-width'} print:ml-0 print:h-auto print:overflow-visible flex-1 flex flex-col h-screen overflow-hidden bg-surface transition-all duration-300`}>
                 {/* Admin Top Bar */}
-                <header className="h-16 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-gutter shrink-0">
+                <header className="print:hidden h-16 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-gutter shrink-0">
                     <div className="flex items-center gap-stack-md text-on-surface-variant">
                         <button onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} className="text-on-surface-variant hover:text-primary p-1 rounded hover:bg-surface-container shrink-0 flex items-center justify-center">
                             <span className="material-symbols-outlined">menu</span>

@@ -15,7 +15,8 @@ class Menu extends Model
         'icon',
         'parent_id',
         'sort_order',
-        'type'
+        'type',
+        'module'
     ];
 
     public function parent()

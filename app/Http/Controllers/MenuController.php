@@ -59,7 +59,8 @@ class MenuController extends Controller
             'icon' => 'nullable|string|max:50',
             'sort_order' => 'integer',
             'type' => 'required|string|in:front,admin',
-            'parent_id' => 'nullable|exists:menus,id'
+            'parent_id' => 'nullable|exists:menus,id',
+            'module' => 'nullable|string'
         ]);
 
         $menu = Menu::create($validated);
@@ -82,7 +83,8 @@ class MenuController extends Controller
             'icon' => 'nullable|string|max:50',
             'sort_order' => 'integer',
             'type' => 'required|string|in:front,admin',
-            'parent_id' => 'nullable|exists:menus,id'
+            'parent_id' => 'nullable|exists:menus,id',
+            'module' => 'nullable|string'
         ]);
 
         $menu->update($validated);

@@ -97,9 +97,11 @@ Route::middleware(['auth:api', \App\Http\Middleware\MatrixPermissionMiddleware::
     Route::apiResource('meetings', \App\Http\Controllers\MeetingController::class)->middleware('module:AKADEMIK');
     Route::get('attendances/matrix', [\App\Http\Controllers\AttendanceController::class, 'matrix'])->middleware('module:AKADEMIK');
     Route::get('attendances/schedules', [\App\Http\Controllers\AttendanceController::class, 'schedules'])->middleware('module:AKADEMIK');
+    Route::get('attendances/summary', [\App\Http\Controllers\AttendanceController::class, 'summary'])->middleware('module:AKADEMIK');
     Route::post('attendances/meeting', [\App\Http\Controllers\AttendanceController::class, 'saveMeeting'])->middleware('module:AKADEMIK');
     Route::apiResource('attendances', \App\Http\Controllers\AttendanceController::class)->middleware('module:AKADEMIK');
     Route::apiResource('teachers', \App\Http\Controllers\TeacherController::class)->middleware('module:AKADEMIK');
+    Route::apiResource('staffs', \App\Http\Controllers\StaffController::class);
     Route::apiResource('students', \App\Http\Controllers\StudentController::class)->middleware('module:AKADEMIK');
     
     // CBT Admin
