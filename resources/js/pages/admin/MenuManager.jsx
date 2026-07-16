@@ -365,14 +365,9 @@ const MenuManager = () => {
                                 ]}
                             />
 
-                            <div className="flex gap-4">
-                                <div className="flex flex-col gap-1 flex-1">
-                                    <Input type="text" value={formData.icon} onChange={(e) => setFormData({...formData, icon: e.target.value})} label="Ikon (Opsional)" placeholder="home" className="font-code text-sm" />
-                                    <p className="text-[10px] text-on-surface-variant -mt-1">Gunakan ID Google Material Symbols</p>
-                                </div>
-                                <div className="w-24">
-                                    <Input type="number" required min="0" value={formData.sort_order} onChange={(e) => setFormData({...formData, sort_order: e.target.value})} label="Urutan" />
-                                </div>
+                            <div className="flex flex-col gap-1">
+                                <Input type="text" value={formData.icon} onChange={(e) => setFormData({...formData, icon: e.target.value})} label="Ikon (Opsional)" placeholder="home" className="font-code text-sm" />
+                                <p className="text-[10px] text-on-surface-variant -mt-1">Gunakan ID Google Material Symbols</p>
                             </div>
                             <div className="mt-4 flex justify-end gap-2">
                                 <Button type="button" onClick={() => setIsModalOpen(false)} variant="outline">Batal</Button>

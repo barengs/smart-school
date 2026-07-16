@@ -100,6 +100,7 @@ Route::middleware(['auth:api', \App\Http\Middleware\MatrixPermissionMiddleware::
     Route::post('attendances/meeting', [\App\Http\Controllers\AttendanceController::class, 'saveMeeting'])->middleware('module:AKADEMIK');
     Route::apiResource('attendances', \App\Http\Controllers\AttendanceController::class)->middleware('module:AKADEMIK');
     Route::apiResource('teachers', \App\Http\Controllers\TeacherController::class)->middleware('module:AKADEMIK');
+    Route::apiResource('staffs', \App\Http\Controllers\StaffController::class);
     Route::apiResource('students', \App\Http\Controllers\StudentController::class)->middleware('module:AKADEMIK');
     
     // CBT Admin

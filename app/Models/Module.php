@@ -15,4 +15,9 @@ class Module extends Model
     {
         return $this->belongsToMany(Service::class);
     }
+
+    public function menus()
+    {
+        return $this->hasMany(Menu::class, 'module', 'code');
+    }
 }

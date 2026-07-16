@@ -9,19 +9,25 @@ import toast from 'react-hot-toast';
 
 const ModuleManager = () => {
     const [modules, setModules] = useState([]);
+    const [allMenus, setAllMenus] = useState([]);
     const [loading, setLoading] = useState(true);
 
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState({ id: null, code: '', name: '', description: '' });
+    const [formData, setFormData] = useState({ id: null, code: '', name: '', description: '', menu_ids: [] });
     const [submitting, setSubmitting] = useState(false);
 
     const fetchModules = () => {
         setLoading(true);
-        axios.get('/modules')
-            .then(res => setModules(res.data))
-            .catch(err => toast.error('Gagal mengambil data modul'))
-            .finally(() => setLoading(false));
+        Promise.all([
+            axios.get('/modules'),
+            axios.get('/menus?type=admin')
+        ]).then(([modRes, menuRes]) => {
+            setModules(modRes.data);
+            setAllMenus(menuRes.data);
+        })
+        .catch(err => toast.error('Gagal mengambil data modul'))
+        .finally(() => setLoading(false));
     };
 
     useEffect(() => {
@@ -29,18 +35,32 @@ const ModuleManager = () => {
     }, []);
 
     const handleAdd = () => {
-        setFormData({ id: null, code: '', name: '', description: '' });
+        setFormData({ id: null, code: '', name: '', description: '', menu_ids: [] });
         setIsModalOpen(true);
     };
 
     const handleEdit = (module) => {
-        setFormData({ id: module.id, code: module.code, name: module.name, description: module.description || '' });
+        setFormData({ 
+            id: module.id, 
+            code: module.code, 
+            name: module.name, 
+            description: module.description || '',
+            menu_ids: module.menus ? module.menus.map(m => m.id) : []
+        });
         setIsModalOpen(true);
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleMenuToggle = (menuId) => {
+        setFormData(prev => {
+            const current = prev.menu_ids || [];
+            if (current.includes(menuId)) return { ...prev, menu_ids: current.filter(id => id !== menuId) };
+            return { ...prev, menu_ids: [...current, menuId] };
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -67,7 +87,23 @@ const ModuleManager = () => {
     const columns = [
         { accessorKey: 'code', header: 'Kode Modul', cell: info => <span className="font-bold">{info.getValue()}</span> },
         { accessorKey: 'name', header: 'Nama Modul' },
-        { accessorKey: 'description', header: 'Deskripsi' },
+        { 
+            id: 'menus', 
+            header: 'Daftar Menu', 
+            cell: ({row}) => {
+                const menus = row.original.menus || [];
+                if (menus.length === 0) return <span className="text-on-surface-variant text-sm italic">Tidak ada menu</span>;
+                return (
+                    <div className="flex flex-wrap gap-1 max-w-xs">
+                        {menus.map(m => (
+                            <span key={m.id} className="px-2 py-0.5 bg-surface-container text-on-surface text-xs rounded border border-outline-variant">
+                                {m.label}
+                            </span>
+                        ))}
+                    </div>
+                );
+            }
+        },
         {
             id: 'actions', header: 'Aksi',
             cell: ({row}) => (
@@ -144,6 +180,29 @@ const ModuleManager = () => {
                         disabled={submitting}
                         rows={3}
                     />
+                    
+                    <div className="mt-2">
+                        <label className="font-label-md text-label-md text-on-surface block mb-2">Menu dalam Modul Ini</label>
+                        <div className="max-h-48 overflow-y-auto border border-outline-variant rounded bg-surface p-3 flex flex-col gap-2">
+                            {allMenus.length === 0 ? (
+                                <p className="text-sm text-on-surface-variant">Belum ada menu yang terdaftar.</p>
+                            ) : allMenus.map(menu => (
+                                <label key={menu.id} className="flex items-center gap-2 cursor-pointer p-1 hover:bg-surface-variant/30 rounded">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={(formData.menu_ids || []).includes(menu.id)}
+                                        onChange={() => handleMenuToggle(menu.id)}
+                                        className="w-4 h-4 text-primary focus:ring-primary"
+                                        disabled={submitting}
+                                    />
+                                    <div>
+                                        <span className="text-sm font-bold text-on-surface">{menu.label}</span>
+                                        <span className="text-xs text-on-surface-variant block">{menu.url}</span>
+                                    </div>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
                     
                     <div className="flex justify-end gap-2 mt-4 pt-4 border-t border-outline-variant">
                         <button 
