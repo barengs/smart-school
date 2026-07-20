@@ -36,6 +36,15 @@ Route::middleware(['auth:api', \App\Http\Middleware\MatrixPermissionMiddleware::
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
 
+    Route::get('/my-teacher-profile', [\App\Http\Controllers\TeacherProfileController::class, 'show']);
+    Route::put('/my-teacher-profile', [\App\Http\Controllers\TeacherProfileController::class, 'update']);
+    Route::post('/my-teacher-profile/educations', [\App\Http\Controllers\TeacherProfileController::class, 'storeEducation']);
+    Route::delete('/my-teacher-profile/educations/{id}', [\App\Http\Controllers\TeacherProfileController::class, 'destroyEducation']);
+    Route::post('/my-teacher-profile/ranks', [\App\Http\Controllers\TeacherProfileController::class, 'storeRank']);
+    Route::delete('/my-teacher-profile/ranks/{id}', [\App\Http\Controllers\TeacherProfileController::class, 'destroyRank']);
+    Route::post('/my-teacher-profile/documents', [\App\Http\Controllers\TeacherProfileController::class, 'storeDocument']);
+    Route::delete('/my-teacher-profile/documents/{id}', [\App\Http\Controllers\TeacherProfileController::class, 'destroyDocument']);
+
     Route::get('/news/export', [NewsController::class, 'exportCsv']);
     Route::apiResource('news', NewsController::class);
     Route::post('/news/{id}/approve', [NewsController::class, 'approve']);
