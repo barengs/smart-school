@@ -223,7 +223,10 @@ const AdminLayout = () => {
                                     <span className="font-body-sm text-body-sm text-on-surface-variant" style={{ fontSize: '11px', lineHeight: '14px' }}>{user?.roles?.[0] || 'User'}</span>
                                 </div>
                             </div>
-                            <button onClick={handleLogout} className="text-error hover:bg-error/10 p-2 rounded-full transition-colors ml-2" title="Keluar">
+                            <Link to="/admin/my-profile" className="text-on-surface-variant hover:text-primary hover:bg-primary/10 p-2 rounded-full transition-colors ml-2" title="Profil Saya">
+                                <span className="material-symbols-outlined">person</span>
+                            </Link>
+                            <button onClick={handleLogout} className="text-error hover:bg-error/10 p-2 rounded-full transition-colors" title="Keluar">
                                 <span className="material-symbols-outlined">logout</span>
                             </button>
                         </div>

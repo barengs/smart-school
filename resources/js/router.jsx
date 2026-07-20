@@ -23,6 +23,7 @@ import RoleMatrix from './pages/admin/RoleMatrix';
 import MenuManager from './pages/admin/MenuManager';
 import PageManager from './pages/admin/PageManager';
 import ProfileManager from './pages/admin/ProfileManager';
+import MyProfile from './pages/admin/MyProfile';
 import OrganizationManager from './pages/admin/OrganizationManager';
 import PpdbManager from './pages/admin/PpdbManager';
 import BatchManager from './pages/admin/BatchManager';
@@ -86,6 +87,7 @@ const AppRouter = () => {
                 <Route path="/admin/menus" element={<MenuManager />} />
                 <Route path="/admin/pages" element={<PageManager />} />
                 <Route path="/admin/profile" element={<ProfileManager />} />
+                <Route path="/admin/my-profile" element={<MyProfile />} />
                 <Route path="/admin/organization" element={<OrganizationManager />} />
                 <Route path="/admin/ppdb" element={<PpdbManager />} />
                 <Route path="/admin/ppdb/batches" element={<BatchManager />} />
